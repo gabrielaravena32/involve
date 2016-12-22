@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400,500');
+
+body {
+  position: absolute;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.page {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 68px);
+  margin-top: 68px;
+  z-index: 0;
+}
+
+.content {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 215px);
+  height: 100%;
+  padding: 20px 60px;
+}
+
+.class-colour-1 { background: #1abc9c; }
+.class-colour-2 { background: #16a085; }
+.class-colour-3 { background: #f1c40f; }
+.class-colour-4 { background: #f39c12; }
+.class-colour-5 { background: #2ecc71; }
+.class-colour-6 { background: #27ae60; }
+.class-colour-7 { background: #e67e22; }
+.class-colour-8 { background: #d35400; }
+.class-colour-9 { background: #3498db; }
+.class-colour-10 { background: #2980b9; }
+.class-colour-11 { background: #e74c3c; }
+.class-colour-12 { background: #c0392b; }
+.class-colour-13 { background: #9b59b6; }
+.class-colour-14 { background: #8e44ad; }
+.class-colour-15 { background: #34495e; }
+.class-colour-16 { background: #2c3e50; }

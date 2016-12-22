@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=utf-8 />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Storage Example</title>
+
+</head>
+<body>
+  <input type="file" id="file" name="file"/>
+
+  <script src="https://www.gstatic.com/firebasejs/3.6.4/firebase.js"></script>
+  <script>
+
+    var config = {
+      apiKey: "AIzaSyBhl6sYMC2vY-6khkDD-61zIJ3GY5UTqyk",
+      storageBucket: "involve-a4e62.appspot.com"
+    };
+    firebase.initializeApp(config);
+
+    var storageRef = firebase.storage().ref();
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      var file = evt.target.files[0];
+      var metadata = {
+        'contentType': file.type
+      };
+
+      // instead of file.name put user's ID and a randomised string
+      storageRef.child('profile-img/' + file.name).put(file, metadata).then(function(snapshot) {
+        var url = snapshot.metadata.downloadURLs[0];
+        console.log(url);
+      }).catch(function(error) {
+        console.error('Upload failed:', error);
+      });
+    }
+
+    window.onload = function() {
+      document.getElementById('file').addEventListener('change', handleFileSelect, false);
+    }
+  </script>
+</body>
+</html>
