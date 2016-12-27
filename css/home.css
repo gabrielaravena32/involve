@@ -21,9 +21,11 @@ body {
 .content {
   position: relative;
   box-sizing: border-box;
-  width: calc(100% - 215px);
-  height: 100%;
+  width: calc(100% - 515.172px);
+  margin-left: 300.172px;
   padding: 20px 60px;
+  background: #fefefe;
+  min-height: 100%;
 }
 
 .class-colour-1 { background: #1abc9c; }
@@ -42,3 +44,171 @@ body {
 .class-colour-14 { background: #8e44ad; }
 .class-colour-15 { background: #34495e; }
 .class-colour-16 { background: #2c3e50; }
+
+.content > * {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  background: white;
+}
+
+.content #post-view-selector {
+  display: inline-block;
+  padding: 10px 20px;
+  /*background: #EDF1F2;*/
+  margin-bottom: 20px;
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
+}
+
+.content #post-view-selector a {
+  position: relative;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  display: inline-block;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.content #post-view-selector a:hover {
+  text-decoration: underline;
+}
+
+.content #post-view-selector a::after {
+  position: absolute;
+  content: " ";
+  display: block;
+  height: 100%;
+  width: 1px;
+  background: #333;
+  left: -10px;
+  top: 0;
+}
+
+.content #post-view-selector a:nth-child(1) { margin-left: 0; }
+.content #post-view-selector a:nth-child(1)::after { display: none; }
+
+.content .post {
+  width: 100%;
+  padding: 15px 30px;
+  box-shadow: 2px 2px 6px 0px rgba(0,0,0,0.2);
+  max-width: 900px;
+  margin-bottom: 20px;
+}
+
+.content .post > * {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 0;
+  display: block;
+  clear: both;
+}
+
+.content .post .post-header {
+  border-bottom: 1px solid #888;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.content .post .post-header .pull-left {
+  float: left;
+}
+
+.content .post .post-header .pull-left img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  float: left;
+  display: inline-block;
+  margin: 0 20px 0 10px;
+}
+
+.content .post .post-header .pull-left .post-image-container {
+  float: left;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-title {
+  font-weight: 500;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-title span {
+  font-weight: 400;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-title span a {
+  color: black;
+  text-decoration: none;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-title span a:hover {
+  text-decoration: underline;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-title::after {
+  display: block;
+  content: " ";
+  clear: both;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-date {
+  color: #555;
+  font-size: 14px;
+}
+
+.content .post .post-header .pull-right {
+  float: right;
+  height: 100%;
+}
+
+.content .post .post-header .pull-right .assignment-indicator {
+  padding: 10px;
+  text-transform: uppercase;
+  font-size: 13px;
+  color: white;
+  box-shadow: 1px 1px 5px 0 rgba(0,0,0,0.5);
+}
+
+.content .post .post-header .pull-right .assignment-indicator.ai-0 {
+  background: #27ae60;
+}
+
+.content .post .post-content {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+.content .post .post-content p {
+  margin: 0;
+  margin-bottom: 15px;
+}
+
+.content .post .post-content a {
+  background: #eee;
+  text-decoration: none;
+  color: inherit;
+  padding: 5px;
+  margin-right: 10px;
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2);
+}
+
+.content .post .post-content a:hover {
+  color: #333;
+}
+
+@media (max-width: 1100px) {
+  .content {
+    width: calc(100% - 300.172px);
+  }
+
+  .content .post  {
+    width: calc(100vw - 450px);
+  }
+
+  #sidebar {
+    display: none;
+  }
+}

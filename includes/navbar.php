@@ -14,7 +14,9 @@
         </g>
       </svg>
     </div>
-    <input type="text" placeholder="Search for posts, people, topics..." />
+    <input id="navbar-search" type="text" placeholder="Search for posts, people, topics..." />
+
+    <div id="navbar-search-results"></div>
   </div>
 
   <!-- Menu icon for smaller screens -->
@@ -22,7 +24,7 @@
 
   <!-- Pull to the right -->
   <div class="pull-right">
-    <img src="images/default.png" id="navbar-userIMG">
+    <img src='<?php echo $userInfo["photo"]."' alt='Profile photo of ".$userInfo['firstName']; ?>' id="navbar-userIMG">
   </div>
 
 </nav>
@@ -60,7 +62,8 @@
   }
 
   nav .navbar-search-wrapper {
-    width: calc(90vw - 500px);
+    width: calc(100vw - 635.172px);
+    margin-left: 60px;
   }
 
   nav .navbar-search-wrapper * {
@@ -89,6 +92,17 @@
     outline: none;
   }
 
+  nav .navbar-search-wrapper #navbar-search-results {
+    display: none;
+    width: calc(100% - 40px);
+    margin: -1px 0 0 40px;
+    background: #fdfdfd;
+  }
+
+  nav .navbar-search-wrapper #navbar-search-results.active {
+    display: block;
+  }
+
   nav .pull-right {
     width: 200px;
     float: right;
@@ -114,7 +128,7 @@
     }
 
     nav .navbar-search-wrapper  {
-      width: calc(100% - 300.17px);
+      width: calc(100% - 350px);
     }
 
     nav #navbar-menu-icon {

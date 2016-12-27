@@ -2,25 +2,37 @@
 
 session_start();
 if($_SESSION['loggedIn'] === true) {
-  header('Location: /home');
+  header('Location: home');
 }
 
 include_once "php/connect.php";
 
-$email = $_POST['email'];
-$pwd = $_POST['password'];
+// sanitise any post inputs
+$email = $conn->real_escape_string($_POST['email']);
+$pwd = $conn->real_escape_string($_POST['password']);
 
+// if the user has tried to log in
 if($email && $pwd) {
-  $sql = "SELECT password FROM users WHERE email='".$email."';";
+  // select the rows in the database with the inputted email address
+  $sql = "SELECT userID,password FROM users WHERE email='".$email."';";
   $result = $conn->query($sql);
 
+  // if an account with that email exists
   if ($result->num_rows == 1) {
     while($row = $result->fetch_assoc()) {
+      // if the password is correct
       if (password_verify($pwd, $row['password'])) {
-        // Logged in
-        $_SESSION['loggedIn'] = True;
-        $_SESSION['email'] = $email;
-        header('Location: /home');
+
+        // generate a randomised 60-digit token (to be used to varify user without storing password or easily modified user id)
+        $token = password_hash(bin2hex(openssl_random_pseudo_bytes(10)), PASSWORD_BCRYPT, ['cost'=>4]);
+        $_SESSION['token'] = $token;
+
+        // add the token to the mysql db
+        $sql2 = "UPDATE users SET token='".$token."' WHERE userID=".$row['userID'].";";
+        $query = $conn->query($sql2);
+
+        // send the user to home.php (feed)
+        header('Location: home');
       } else {
         // Password wrong
         echo "<script>document.addEventListener('DOMContentLoaded', function(event){ passwordWrong(); });</script>";
@@ -31,6 +43,7 @@ if($email && $pwd) {
     echo "<script>document.addEventListener('DOMContentLoaded', function(event){ emailWrong(); });</script>";
   }
 } else if ($email){
+  // the password inputed was incorrect or not filled in
   echo "<script>document.addEventListener('DOMContentLoaded', function(event){ passwordWrong(); });</script>";
 }
 
