@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if($_SESSION['loggedIn'] === true) {
+if($_SESSION['token']) {
   header('Location: home');
 }
 

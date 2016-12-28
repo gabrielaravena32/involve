@@ -21,9 +21,9 @@ body {
 .content {
   position: relative;
   box-sizing: border-box;
-  width: calc(100% - 515.172px);
+  width: calc(100% - 525.172px);
   margin-left: 300.172px;
-  padding: 20px 60px;
+  padding: 30px 60px;
   background: #fefefe;
   min-height: 100%;
 }
@@ -51,42 +51,6 @@ body {
   display: block;
   background: white;
 }
-
-.content #post-view-selector {
-  display: inline-block;
-  padding: 10px 20px;
-  /*background: #EDF1F2;*/
-  margin-bottom: 20px;
-  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.2);
-}
-
-.content #post-view-selector a {
-  position: relative;
-  color: #333;
-  text-decoration: none;
-  font-size: 14px;
-  display: inline-block;
-  margin-left: 20px;
-  cursor: pointer;
-}
-
-.content #post-view-selector a:hover {
-  text-decoration: underline;
-}
-
-.content #post-view-selector a::after {
-  position: absolute;
-  content: " ";
-  display: block;
-  height: 100%;
-  width: 1px;
-  background: #333;
-  left: -10px;
-  top: 0;
-}
-
-.content #post-view-selector a:nth-child(1) { margin-left: 0; }
-.content #post-view-selector a:nth-child(1)::after { display: none; }
 
 .content .post {
   width: 100%;
@@ -208,7 +172,7 @@ body {
     width: calc(100vw - 450px);
   }
 
-  #sidebar {
+  #sidebar-right {
     display: none;
   }
 }

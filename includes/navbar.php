@@ -62,7 +62,7 @@
   }
 
   nav .navbar-search-wrapper {
-    width: calc(100vw - 635.172px);
+    width: calc(100vw - 645.172px);
     margin-left: 60px;
   }
 
