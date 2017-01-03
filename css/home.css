@@ -95,19 +95,19 @@ body {
 }
 
 .content .post .post-header .pull-left .post-image-container .post-title {
-  font-weight: 500;
-}
-
-.content .post .post-header .pull-left .post-image-container .post-title span {
   font-weight: 400;
 }
 
-.content .post .post-header .pull-left .post-image-container .post-title span a {
+.content .post .post-header .pull-left .post-image-container .post-title .post-title-teacher {
+  font-weight: 500;
+}
+
+.content .post .post-header .pull-left .post-image-container .post-title a {
   color: black;
   text-decoration: none;
 }
 
-.content .post .post-header .pull-left .post-image-container .post-title span a:hover {
+.content .post .post-header .pull-left .post-image-container .post-title a:hover {
   text-decoration: underline;
 }
 

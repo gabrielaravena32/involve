@@ -23,7 +23,7 @@ if($email && $pwd) {
       // if the password is correct
       if (password_verify($pwd, $row['password'])) {
 
-        // generate a randomised 60-digit token (to be used to varify user without storing password or easily modified user id)
+        // generate a randomised 60-digit token (to be used to verify user without storing password or easily modified user id)
         $token = password_hash(bin2hex(openssl_random_pseudo_bytes(10)), PASSWORD_BCRYPT, ['cost'=>4]);
         $_SESSION['token'] = $token;
 
@@ -90,8 +90,8 @@ if($email && $pwd) {
           <div class="info-content">
             <div class="info-wrap">
               <div class="subheading">Involve simplifies teaching.</div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra eros ac dolor consectetur semper. Ut vel odio nibh. Nunc porta quis justo ac ullamcorper. Donec condimentum risus eu pharetra dictum. Cras euismod, turpis sed congue tempus, purus augue egestas odio, sed porta elit arcu in est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <a href="" class="btn btn-red">Start Teaching</a>
+              <p>Communicate with students in just a few clicks. Involve helps teachers to effectively plan classes that engage their students.<br>Want to find out more, <a href="info">click here</a>.</p>
+              <a href="start-teaching" class="btn btn-red">Start Teaching</a>
             </div>
           </div>
         </section>
@@ -103,8 +103,8 @@ if($email && $pwd) {
           <div class="info-content">
             <div class="info-wrap">
               <div class="subheading">Involve is made for students.</div>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pharetra eros ac dolor consectetur semper. Ut vel odio nibh. Nunc porta quis justo ac ullamcorper. Donec condimentum risus eu pharetra dictum. Cras euismod, turpis sed congue tempus, purus augue egestas odio, sed porta elit arcu in est. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              <a href="" class="btn btn-yellow">Start Learning</a>
+              <p>Need help with an assignment or help planning your work? Involve is designed to help students communicate with teachers and peers. While also offering planning tools to aid in your productivity.<br>Want to see Involve in action, <a href="info">click here</a>.</p>
+              <a href="start-learning" class="btn btn-yellow">Start Learning</a>
             </div>
           </div>
           <div class="info-decoration">

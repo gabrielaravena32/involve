@@ -270,6 +270,12 @@ section {
 
 .info-content p {
   margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.info-content p a {
+  text-decoration: none;
+  color: #3498db;
 }
 
 #info-teacher .info-decoration .info-colour {
