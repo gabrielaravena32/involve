@@ -14,7 +14,7 @@ $pwd = $conn->real_escape_string($_POST['password']);
 // if the user has tried to log in
 if($email && $pwd) {
   // select the rows in the database with the inputted email address
-  $sql = "SELECT userID,password FROM users WHERE email='".$email."';";
+  $sql = "SELECT userID,password FROM users WHERE email='{$email}';";
   $result = $conn->query($sql);
 
   // if an account with that email exists
@@ -28,7 +28,7 @@ if($email && $pwd) {
         $_SESSION['token'] = $token;
 
         // add the token to the mysql db
-        $sql2 = "UPDATE users SET token='".$token."' WHERE userID=".$row['userID'].";";
+        $sql2 = "UPDATE users SET token='".$token."' WHERE userID={$row['userID']};";
         $query = $conn->query($sql2);
 
         // send the user to home.php (feed)
@@ -121,8 +121,18 @@ if($email && $pwd) {
           </div>
           <div id="download-bottom">
             <p>Select your platform.</p>
-            <a href="" class="btn btn-blue">Download for Mac</a>
-            <a href="" class="btn btn-grey">Download for Windows</a>
+            <a href="" class="btn btn-blue">
+              <svg width="15" height="15" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ffffff">
+                <path d="M 256.50,384.00c-66.156,0.00-130.837-9.686-193.05-28.849l 10.124-30.371C 132.526,342.859, 193.812,352.00, 256.50,352.00 c 8.172,0.00, 16.319-0.164, 24.441-0.474C 283.054,312.746, 288.00,288.00, 288.00,288.00s-32.00,0.00-96.00,0.00c0.00-87.505, 29.909-165.027, 62.465-223.50L0.00,64.50 l0.00,383.00 l 283.088,0.00 c-2.336-22.842-3.152-44.43-3.077-63.92C 272.195,383.854, 264.358,384.00, 256.50,384.00z M 96.00,128.00l 32.00,0.00 l0.00,64.00 L 96.00,192.00 L 96.00,128.00 zM 512.00,64.50L 298.435,64.50 c-0.974,1.598-1.947,3.207-2.92,4.843c-19.208,32.286-34.468,65.379-45.358,98.36 c-9.103,27.566-15.151,55.116-18.086,82.297l 102.429,0.00 l-9.229,45.417c-0.157,0.808-4.085,21.422-6.10,53.471 c 40.932-4.063, 81.111-12.103, 120.257-24.107l 10.124,30.371c-42.783,13.178-86.732,21.874-131.526,26.021 c-0.018,2.188-0.028,4.395-0.021,6.64c 0.062,20.315, 1.173,40.285, 3.301,59.688L 512.00,447.501 L 512.00,64.50 z M 416.00,192.00l-32.00,0.00 l0.00-64.00 l 32.00,0.00 L 416.00,192.00 zM 293.632,512.00l 39.084,0.00 c-2.73-10.907-5.094-22.096-7.069-33.543c-1.747-10.126-3.191-20.46-4.343-30.957l-38.216,0.00 C 285.204,468.189, 288.563,489.901, 293.632,512.00zM 344.224,0.00l-48.198,0.00 c-12.875,17.435-27.466,39.185-41.56,64.50l 43.969,0.00 C 315.272,36.844, 332.017,14.799, 344.224,0.00z" ></path>
+              </svg>
+              Download for Mac
+            </a>
+            <a href="" class="btn btn-grey">
+              <svg width="15" height="15" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#95a5a6">
+                <path d="M 0.175,256.00 L 0.00,99.963 L 192.00,73.891 L 192.00,256.00 ZM 224.00,69.241 L 479.936,32.00 L 479.936,256.00 L 224.00,256.00 ZM 479.999,288.00 L 479.936,512.00 L 224.00,475.992 L 224.00,288.00 ZM 192.00,471.918 L 0.156,445.621 L 0.146,288.00 L 192.00,288.00 Z" ></path>
+              </svg>
+              Download for Windows
+            </a>
           </div>
         </section>
 

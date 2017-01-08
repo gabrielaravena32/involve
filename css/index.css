@@ -357,6 +357,15 @@ section {
   text-transform: none;
 }
 
+#download #download-bottom a.btn svg {
+  margin-bottom: -2px;
+  margin-right: 2px;
+}
+
+#download #download-bottom a.btn:nth-child(2) {
+  margin-right: 20px;
+}
+
 
 
 

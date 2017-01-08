@@ -24,7 +24,7 @@
 
   <!-- Pull to the right -->
   <div class="pull-right">
-    <img src='<?php echo $userInfo["photo"]."' alt='Profile photo of ".$userInfo['firstName']; ?>' id="navbar-userIMG" onclick="accountDropDownToggle()">
+    <img src='<?php echo $userInfo['photo']."' alt='Profile photo of ".$userInfo['firstName']; ?>' id="navbar-userIMG" onclick="accountDropDownToggle()">
     <div id="account-dropdown">
       <span>Logged in as:</span>
       <span><?php echo $userInfo['firstName'].' '.$userInfo['lastName']; ?></span>

@@ -1,4 +1,5 @@
 <?php
+
 // start the session (keep user logged in)
 session_start();
 
@@ -20,7 +21,7 @@ if (!$_SESSION['token']) {
   // if the user is logged in
 } else {
   // select the user information from the database where the user's token is correct
-  $sql = "SELECT * FROM userInfo WHERE userID=(SELECT userID FROM users WHERE token='".$_SESSION['token']."');";
+  $sql = "SELECT * FROM userInfo WHERE userID=(SELECT userID FROM users WHERE token='{$_SESSION['token']}');";
   $result = $conn->query($sql);
 
   // if there is a user with that token
@@ -51,6 +52,10 @@ function timeToWords($d) {
   // if the date is more than two days from the current morning (e.g. not today or tomorrow)
   // or if the date is reverse of that (not yesterday)
   if($d > $currentDay + (2*24*60*60) || $d < $currentDay - (24*60*60)) {
+    // if the year is not the same
+    if(date("Y",$d) != date("Y", $currentDay)) {
+      return date("d M Y",$d);
+    }
     return date("d M",$d);
 
     // the date is either yesterday, today or tomorrow
@@ -92,29 +97,15 @@ function timeToWords($d) {
         <!-- Posts -->
         <?php
 
-        $postSQL = '';
-        if ($_GET['v'] == 'tasks') {
-          // prepare SQL to get only assessment tasks
-          // returns the date of post, due date of assignments, type of post, teachers name (prefix and lastName e.g. Mr, Smith),
-          //     the teachers photo, the classes' ID and the class's name
-          $postSQL = "SELECT p.date, p.due, p.text, p.type, p.postID, ui.prefix, ui.lastName, ui.photo, ui.link, g.groupID, g.groupName FROM
-                        (posts AS p RIGHT JOIN userInfo AS ui ON p.`userID` = ui.`userID`)
-                        RIGHT JOIN groups AS g ON p.`groupID` = g.`groupID`
-                      WHERE
-                      	p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID='".$userInfo['userID']."')
-                        AND p.`type` = 'a'
-                      ORDER BY p.date DESC;";
-        } else {
-          // prepareSQL to get all posts from relevant groups
-          // returns the date of post, due date of assignments, type of post, teachers name (prefix and lastName e.g. Mr, Smith),
-          //     the teachers photo, the classes' ID and the class's name
-          $postSQL = "SELECT p.date, p.due, p.text, p.type, p.postID, ui.prefix, ui.lastName, ui.photo, ui.link, g.groupName, g.groupLink FROM
-                        (posts AS p RIGHT JOIN userInfo AS ui ON p.`userID` = ui.`userID`)
-                        RIGHT JOIN groups AS g ON p.`groupID` = g.`groupID`
-                      WHERE
-                      	p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID='".$userInfo['userID']."')
-                      ORDER BY p.date DESC;";
-        }
+        // prepareSQL to get all posts from relevant groups
+        // returns the date of post, due date of assignments, type of post, teachers name (prefix and lastName e.g. Mr, Smith),
+        //     the teachers photo, the classes' ID and the class's name
+        $postSQL = "SELECT p.date, p.due, p.text, p.type, p.postID, ui.prefix, ui.lastName, ui.photo, ui.link, g.groupName, g.groupLink FROM
+                      (posts AS p RIGHT JOIN userInfo AS ui ON p.`userID` = ui.`userID`)
+                      RIGHT JOIN groups AS g ON p.`groupID` = g.`groupID`
+                    WHERE
+                    	p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID='{$userInfo['userID']}')
+                    ORDER BY p.date DESC;";
 
         // query the database with relevant query
         $postQuery = $conn->query($postSQL);
