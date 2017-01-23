@@ -250,11 +250,6 @@ section {
   box-shadow: 0 0 5px 3px rgba(0,0,0,0.2);
   width: 60%;
   height: 100%;
-
-  /* optional rotation */
-  /*width: 130%;
-  height: 300%;
-  transform: rotate(-10deg) translate(calc(-15vw + 40px),-100px);*/
 }
 
 .info-content {
@@ -266,6 +261,7 @@ section {
   box-sizing: border-box;
   display: flex;
   align-items: center;
+  font-weight: 300;
 }
 
 .info-content p {
@@ -278,8 +274,39 @@ section {
   color: #3498db;
 }
 
+.info-content ul {
+  counter-reset: teacher-counter;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0 0;
+  line-height: 1.6;
+}
+
+.info-content ul li {
+  padding-left: 30px;
+  margin-bottom: 7px;
+}
+
+.info-content ul li::before {
+  display: inline-block;
+	content: counter(teacher-counter);
+	counter-increment: teacher-counter;
+  width: 20px;
+  height: 20px;
+  padding: 1px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 20px;
+  border-radius: 50%;
+  color: white;
+  margin: 0 8px 0 -30px;
+}
+
 #info-teacher .info-decoration .info-colour {
   background: #e74c3c;
+  background-image: url(http://i.imgur.com/wIA9tGG.jpg?1); /* needs to change */
+  background-size: cover;
+  background-position: center right;
 }
 
 #info-teacher .info-decoration img {
@@ -288,13 +315,17 @@ section {
   margin-left: 10%;
 }
 
+#info-teacher .info-content ul li:before {
+  background: #e74c3c;
+}
+
 #info-student .info-decoration .info-colour {
   background: #f1c40f;
+  background-image: url(http://i.imgur.com/ka9DVd2.jpg?1); /* needs to change */
+  background-size: cover;
+  background-position: center;
   right: 0;
   left: auto;
-
-  /* optional rotation */
-  /*transform: rotate(-10deg) translate(390px,-100px);*/
 }
 
 #info-student .info-decoration img {
@@ -302,6 +333,11 @@ section {
   width: 80%;
   margin-left: 10%;
 }
+
+#info-student .info-content ul li:before {
+  background: #f1c40f;
+}
+
 
 
 
@@ -415,6 +451,7 @@ section {
   background: white;
   border: 1px solid rgb(217,217,217);
   margin-bottom: 16px;
+  line-height: 20px;
 }
 
 #sign-in-modal form input.incorrect {

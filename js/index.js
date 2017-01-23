@@ -45,18 +45,6 @@ document.onscroll = function() {
   downloadImgElem.style.transform = "translate("+(scrollX-documentOffset+68)/4+"px,0px)";
 };
 
-// information link
-document.getElementById('nav-info').onclick = function(e) {
-  e.preventDefault();
-  document.getElementById('info-teacher').scrollIntoView(false);
-};
-
-// download link
-document.getElementById('nav-download').onclick = function(e) {
-  e.preventDefault();
-  document.getElementById('download').scrollIntoView(false);
-};
-
 
 // Source: http://stackoverflow.com/questions/4770025/how-to-disable-scrolling-temporarily
 // Credit to: galambalazs (22/1/11)
@@ -97,7 +85,8 @@ function enableScroll() {
 
 // sign in link
 document.getElementById('nav-signin').onclick = function(e) {
-  e.preventDefault(); // stop link
+  console.log('abc');
+  e.preventDefault();
   signinClick();
 };
 

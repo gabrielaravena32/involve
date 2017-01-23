@@ -82,95 +82,229 @@ function timeToWords($d) {
     <link rel="stylesheet" href="css/home.css">
     <script src="js/home.js"></script>
   </head>
-  <body onload="progressBar()">
+  <body>
 
-    <!-- Navbar -->
-    <?php include_once "includes/navbar.php"; ?>
+    <?php include_once "includes/sidebar-left.php"; ?>
 
-    <div class="page">
+    <!-- Page content -->
+    <div class="content" id="content">
 
-      <?php include_once "includes/sidebar-left.php"; ?>
+      <!-- Posts -->
+      <?php
 
-      <!-- Page content -->
-      <div class="content" id="content">
+      // prepareSQL to get all posts from relevant groups
+      // returns the date of post, due date of assignments, type of post, teachers name (prefix and lastName e.g. Mr, Smith),
+      //     the teachers photo, the classes' ID and the class's name
+      $postSQL = "SELECT p.date, p.due, p.text, p.type, p.postID, p.postHash, ui.userID, ui.prefix, ui.firstName, ui.lastName, ui.photo, ui.link, g.groupName, g.groupLink FROM
+                    (posts AS p RIGHT JOIN userInfo AS ui ON p.`userID` = ui.`userID`)
+                    RIGHT JOIN groups AS g ON p.`groupID` = g.`groupID`
+                  WHERE
+                  	p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID={$userInfo['userID']})
+                    OR
+                    p.`groupID` IN (SELECT groupID FROM groups WHERE teacherID={$userInfo['userID']})
+                  ORDER BY p.date DESC
+                  LIMIT 20;";
 
-        <!-- Posts -->
-        <?php
+      // query the database with relevant query
+      $postQuery = $conn->query($postSQL);
 
-        // prepareSQL to get all posts from relevant groups
-        // returns the date of post, due date of assignments, type of post, teachers name (prefix and lastName e.g. Mr, Smith),
-        //     the teachers photo, the classes' ID and the class's name
-        $postSQL = "SELECT p.date, p.due, p.text, p.type, p.postID, ui.prefix, ui.lastName, ui.photo, ui.link, g.groupName, g.groupLink FROM
-                      (posts AS p RIGHT JOIN userInfo AS ui ON p.`userID` = ui.`userID`)
-                      RIGHT JOIN groups AS g ON p.`groupID` = g.`groupID`
-                    WHERE
-                    	p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID='{$userInfo['userID']}')
-                    ORDER BY p.date DESC;";
+      // function to return the the title of a webpage given a URL
+      // needed because link's can have dynamic titles
+      // Credit: http://stackoverflow.com/questions/4348912/get-title-of-website-via-link
+      function get_title($url){
+        $str = file_get_contents($url);
+        if(strlen($str)>0){
+          $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
+          preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
+          return $title[1];
+        }
+      }
 
-        // query the database with relevant query
-        $postQuery = $conn->query($postSQL);
+      $attachmentSQL = "SELECT a.postID, f.fileName, f.fileIntUrl, f.fileExtUrl, f.fileType, f.internalBlob
+                        FROM
+                        	attachments AS a
+                        	RIGHT JOIN files AS f ON f.fileID = a.fileID
+                        WHERE a.postID IN
+                          (SELECT * FROM (SELECT postID FROM posts
+                            WHERE
+                              groupID IN (SELECT groupID FROM userGroups WHERE userID={$userInfo['userID']})
+                              OR
+                              groupID IN (SELECT groupID FROM groups WHERE teacherID={$userInfo['userID']})
+                          ORDER BY date DESC
+                          LIMIT 20) temp_tab);";
 
-        // prepare an output
-        $output = '';
+      $attachmentResult = $conn->query($attachmentSQL);
+      $attachments = [];
 
-        // if there are posts --> loop through all posts individually
-        if ($postQuery->num_rows > 0) {
-          while($post = $postQuery->fetch_assoc()) {
+      if($attachmentResult->num_rows > 0) {
+        while($aRow = $attachmentResult->fetch_assoc()) {
+          if(!$attachments[$aRow['postID']]) {
+            $attachments[$aRow['postID']] = [];
+          }
+          $attachments[$aRow['postID']][] = [$aRow['fileName'], $aRow['fileIntUrl'], $aRow['fileExtUrl'], $aRow['fileType'], $aRow['internalBlob']];
+        }
+      }
 
-            // get the type of the post (e.g. assignment or text)
-            $type = $post['type'];
-            if($type === 't') {
-              // output of regular text post
-              $output .= '<div class="post"><div class="post-header"><div class="pull-left">
-                        <img src="'.$post["photo"].'" alt="Profile photo of '.$post["prefix"].' '.$post["lastName"].'">
-                        <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'.$post["prefix"]
-                        .' '.$post["lastName"].'</a> to <a href="group/'.$post["groupLink"].'">'.$post["groupName"]
-                        .'</a></span><span class="post-date">'.timeToWords($post['date']).'
-                        </span></div></div></div><div class="post-content"><p>'.$post['text'].'</p><a href="" id="post-comment-'
-                        .$post['postID'].'" class="post-content-comment">Add Comment</a></div></div>';
-            } else if($type === 'a'){
-              // output of an assignment post
-              $output .= '<div class="post post-assignment"><div class="post-header"><div class="pull-left">
-                        <img src="'.$post["photo"].'" alt="Profile photo of '.$post["prefix"].' '.$post["lastName"].'">
-                        <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'
-                        .$post["prefix"].' '.$post["lastName"].'</a> to <a href="group/'.$post["groupLink"].'">'.$post["groupName"]
-                        .'</a></span><span class="post-date">'.timeToWords($post['date']).'
-                        </span></div></div><div class="pull-right"><div class="assignment-indicator ai-0">Due
-                        '.timeToWords($post['due']).'</div></div></div>
-                        <div class="post-content"><p>'.$post['text'].'</p><a href="" id="post-handin-'
-                        .$post['postID'].'" class="post-assignment-handin">Hand In</a><a href="" id="post-comment-'
-                        .$post['postID'].'" class="post-content-comment">Add Comment</a></div></div>';
+      // prepare an output
+      $output = '';
+
+      // if there are posts --> loop through all posts individually
+      if ($postQuery->num_rows > 0) {
+        while($post = $postQuery->fetch_assoc()) {
+
+          $attachmentOutput = '';
+          $atts = $attachments[$post['postID']];
+          if($atts) {
+            foreach($atts as $att) {
+              $attachmentOutput .= '';
+              switch($att[3]) {
+                case 'img':
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
+                                          <div class="post-att-img" style="background-image: url('.$att[2].');"></div>
+                                          <div class="post-att-info">
+                                            <span>'.$att[0].'</span>
+                                            <span>Image</span>
+                                          </div>
+                                        </a>';
+                  break;
+
+                case 'url':
+                  $attachmentOutput .= '<a class="post-attachment" href="'.$att[2].'" target="_blank">
+                                          <iframe src="'.$att[2].'" sandbox></iframe>
+                                          <div class="post-att-info">
+                                            <span>'.get_title($att[2]).'</span>
+                                            <span>'.$att[2].'</span>
+                                          </div>
+                                        </a>';
+                  break;
+
+                case 'pdf':
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
+                                          <div class="post-att-img" style="background-image: url(data:image/jpeg;base64,' .  base64_encode($att[4]).');"></div>
+                                          <div class="post-att-info">
+                                            <span>'.$att[0].'</span>
+                                            <span>PDF</span>
+                                          </div>
+                                        </a>';
+                  break;
+
+                case 'html':
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'"></a>';
+                  break;
+
+                case 'word':
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
+                                          <div class="post-att-word"></div>
+                                          <div class="post-att-info">
+                                            <span>'.$att[0].'</span>
+                                            <span>Word</span>
+                                          </div>
+                                        </a>';
+                  break;
+
+                case 'ppt':
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
+                                          <div class="post-att-word"></div>
+                                          <div class="post-att-info">
+                                            <span>'.$att[0].'</span>
+                                            <span>Powerpoint</span>
+                                          </div>
+                                        </a>';
+                  break;
+
+                case 'excel':
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
+                                          <div class="post-att-word"></div>
+                                          <div class="post-att-info">
+                                            <span>'.$att[0].'</span>
+                                            <span>Excel</span>
+                                          </div>
+                                        </a>';
+                  break;
+
+                default:
+                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'"></a>';
+                  break;
+              }
             }
+            $attachmentOutput .= '<br>';
+          }
+
+          // get the type of the post (e.g. assignment or text)
+          $type = $post['type'];
+          // if the post is text
+          if($type === 't') {
+            // output of regular text post
+            $output .= '<div class="post"><div class="post-header"><div class="pull-left">';
+
+            // If it is your post
+            if($post['userID'] === $userInfo['userID']) {
+              // say 'You' instead of your name
+              $output .= '<img src="'.$post["photo"].'" alt="Your profile photo">
+                        <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">You</a>';
+            // else: not your post
+            } else {
+              // if a teacher's post
+              if($post['prefix']) {
+                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["prefix"].' '.$post["lastName"].'">
+                          <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'.$post["prefix"]
+                          .' '.$post["lastName"].'</a>';
+              // else: student's post
+              } else {
+                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["firstName"].' '.$post["lastName"].'">
+                          <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'.$post["firstName"]
+                          .' '.$post["lastName"].'</a>';
+              }
+            }
+            // add the rest of the text
+            $output .= ' to <a href="group/'.$post["groupLink"].'">'.$post["groupName"].'</a></span><span class="post-date">'.timeToWords($post['date']).
+                        '</span></div></div></div><div class="post-content"><p>'.$post['text'].'</p>'.$attachmentOutput.'<a href="" id="post-comment-'
+                        .$post['postHash'].'" class="post-content-comment">Add Comment</a></div></div>';
+
+          // else: if the post is an assignment
+          } else if($type === 'a'){
+            // output of an assignment post
+            $output .= '<div class="post post-assignment"><div class="post-header"><div class="pull-left">';
+
+            // if this is your post
+            if ($post['userID'] === $userInfo['userID']) {
+              // say 'You' instead of name
+              $output .= '<img src="'.$post["photo"].'" alt="Your profile photo"><div class="post-image-container">'.
+                          '<span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">You</a>';
+            // else: not your post
+            } else {
+              // if teacher post
+              if($post['prefix']) {
+                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["prefix"].' '.$post["lastName"].'">
+                <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'
+                .$post["prefix"].' '.$post["lastName"].'</a>';
+              // else: student
+              } else {
+                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["firstName"].' '.$post["lastName"].'">
+                <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'
+                .$post["firstName"].' '.$post["lastName"].'</a>';
+              }
+
+            }
+            // add the rest of the assignment text
+            $output .= ' to <a href="group/'.$post["groupLink"].'">'.$post["groupName"]
+                      .'</a></span><span class="post-date">'.timeToWords($post['date']).'
+                      </span></div></div><div class="pull-right"><div class="assignment-indicator ai-0">Due
+                      '.timeToWords($post['due']).'</div></div></div>
+                      <div class="post-content"><p>'.$post['text'].'</p>'.$attachmentOutput.'<a href="" id="post-handin-'
+                      .$post['postHash'].'" class="post-assignment-handin">Hand In</a><a href="" id="post-comment-'
+                      .$post['postHash'].'" class="post-content-comment">Add Comment</a></div></div>';
           }
         }
-        // print the output to the screen
-        echo $output;
-        ?>
+      }
+      // print the output to the screen
+      echo $output;
+      ?>
 
-        <!-- End with a load more -->
-      </div>
-
-      <!-- sidebar on right -->
-      <?php include_once "includes/sidebar-right.php"; ?>
-
+      <!-- End with a load more -->
     </div>
 
-    <script type="text/javascript">
-
-      function updateLastOnline() {
-        var request;
-        if (window.XMLHttpRequest) {
-          request = new XMLHttpRequest();
-        } else {
-          request = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        request.open('GET', 'php/lastOnline.php', true);
-        request.send();
-
-        setTimeout(updateLastOnline, 58000);
-      }
-      updateLastOnline();
-
-    </script>
+    <!-- sidebar on right -->
+    <?php include_once "includes/sidebar-right.php"; ?>
   </body>
 </html>

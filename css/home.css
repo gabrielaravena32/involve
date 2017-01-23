@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto:100,400,500');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
 
 body {
-  position: absolute;
+  position: relative;
   display: block;
   margin: 0px;
   padding: 0px;
@@ -10,40 +10,14 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.page {
-  position: relative;
-  width: 100%;
-  height: calc(100% - 68px);
-  margin-top: 68px;
-  z-index: 0;
-}
-
 .content {
   position: relative;
   box-sizing: border-box;
-  width: calc(100% - 525.172px);
-  margin-left: 300.172px;
+  width: calc(100% - 490px);
+  margin-left: 265px;
   padding: 30px 60px;
-  background: #fefefe;
   min-height: 100%;
 }
-
-.class-colour-1 { background: #1abc9c; }
-.class-colour-2 { background: #16a085; }
-.class-colour-3 { background: #f1c40f; }
-.class-colour-4 { background: #f39c12; }
-.class-colour-5 { background: #2ecc71; }
-.class-colour-6 { background: #27ae60; }
-.class-colour-7 { background: #e67e22; }
-.class-colour-8 { background: #d35400; }
-.class-colour-9 { background: #3498db; }
-.class-colour-10 { background: #2980b9; }
-.class-colour-11 { background: #e74c3c; }
-.class-colour-12 { background: #c0392b; }
-.class-colour-13 { background: #9b59b6; }
-.class-colour-14 { background: #8e44ad; }
-.class-colour-15 { background: #34495e; }
-.class-colour-16 { background: #2c3e50; }
 
 .content > * {
   position: relative;
@@ -150,6 +124,75 @@ body {
   margin-bottom: 15px;
 }
 
+.content .post .post-content a.post-attachment {
+  display: block;
+  box-sizing: border-box;
+  position: relative;
+  width: auto;
+  height: 72px;
+  padding: 0;
+  margin-bottom: 5px;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-shadow: none;
+  border-radius: 3px;
+  background: #efefef;
+  overflow: hidden;
+}
+
+.content .post .post-content a.post-attachment:hover {
+  background: #e7e7e7;
+}
+
+.content .post .post-content .post-attachment > *:nth-child(1) {
+  display: inline-block;
+  width: 115px;
+  height: 70px;
+  float: left;
+}
+
+.content .post .post-content .post-attachment .post-att-info {
+  display: inline-block;
+  padding: 0 20px;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.content .post .post-content .post-attachment .post-att-info span {
+  padding: 1px 0;
+}
+
+.content .post .post-content .post-attachment .post-att-info span:nth-child(2) {
+  font-weight: 300;
+}
+
+.content .post .post-content .post-attachment .post-att-img,
+.content .post .post-content .post-attachment .post-att-word,
+.content .post .post-content .post-attachment .post-att-ppt,
+.content .post .post-content .post-attachment .post-att-excel {
+  background-size: cover;
+  background-position: center;
+}
+
+.content .post .post-content .post-attachment .post-att-word {
+  background-image: url(../images/home/word.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-ppt {
+  background-image: url(../images/home/ppt.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-excel {
+  background-image: url(../images/home/excel.gif);
+}
+
+.content .post .post-content .post-attachment > iframe:nth-child(1) {
+  border: 0;
+  overflow: hidden;
+  pointer-events:none;
+}
+
 .content .post .post-content a {
   background: #eee;
   text-decoration: none;
@@ -165,11 +208,7 @@ body {
 
 @media (max-width: 1100px) {
   .content {
-    width: calc(100% - 300.172px);
-  }
-
-  .content .post  {
-    width: calc(100vw - 450px);
+    width: calc(100% - 265px);
   }
 
   #sidebar-right {

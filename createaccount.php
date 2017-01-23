@@ -63,15 +63,17 @@ if ($_SESSION['token']) {
         <p>Please fill in the following to complete your account.</p>
         <input type="email" id="create-account-t-email" placeholder="Email Address" onblur="checkEmail(this.value)">
         <input type="password" id="create-account-t-password" placeholder="Password" onkeyup="checkPassword(this.value)" onblur="checkPassword(this.value)">
-        <select id="create-account-t-prefix" onblur="checkPrefix(this.value)">
-          <option disabled selected>Prefix</option>
-          <option value="Mr">Mr</option>
-          <option value="Mrs">Mrs</option>
-          <option value="Ms">Ms</option>
-          <option value="Miss">Miss</option>
-          <option value="Dr">Dr</option>
-          <option value="Professor">Professor</option>
-        </select>
+        <div class="create-account-dropdown-wrap">
+          <select id="create-account-t-prefix" onblur="checkPrefix(this.value)">
+            <option disabled selected>Prefix</option>
+            <option value="Mr">Mr</option>
+            <option value="Mrs">Mrs</option>
+            <option value="Ms">Ms</option>
+            <option value="Miss">Miss</option>
+            <option value="Dr">Dr</option>
+            <option value="Professor">Professor</option>
+          </select>
+        </div>
         <div class="select-arrow" id="create-account-t-prefix-arrow"></div>
         <input type="text" id="create-account-t-first" placeholder="First Name" onblur="checkName('t-first', this.value)">
         <input type="text" id="create-account-t-last" placeholder="Last Name" onblur="checkName('t-last', this.value)">
