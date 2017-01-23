@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
+
+body {
+  position: absolute;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+#navbar {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  height: 68px;
+  background: white;
+  padding: 0 50px;
+  box-shadow: 2px 2px 6px 2px rgba(0,0,0,0.2);
+  z-index: 2;
+}
+
+#navbar > * {
+  position: relative;
+  box-sizing: border-box;
+  height: 68px;
+  line-height: 68px;
+}
+
+#navbar > a {
+  float: left;
+  font-size: 18px;
+  font-weight: 300;
+  font-style: italic;
+  cursor: pointer;oc
+}
+
+#navbar > a span {
+  font-weight: 400;
+  font-style: normal;
+  margin-left: 1px;
+  color: #43c5b8;
+}
+
+#navbar .pull-right {
+  float: right;
+}
+
+#navbar .pull-right a {
+  font-size: 14px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+#navbar .pull-right a:hover {
+  text-decoration: underline;
+}
+
+#content {
+  position: relative;
+  background: rgb(82, 86, 89);
+  z-index: 1;
+  width: 100%;
+  height: calc(100% - 68px);
+  box-sizing: border-box;
+}
+
+#content.content-pdf iframe {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+#content.content-img,
+#content.content-download {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#content.content-img img {
+  position: relative;
+  width: auto;
+  height: auto;
+  max-width: 90%;
+  max-height: 90%;
+}
+
+#content.content-download .download {
+  position: relative;
+  box-sizing: border-box;
+  width: auto;
+  height: 155px;
+  padding: 20px;
+  background: white;
+}
+
+#content.content-download .download .download-top {
+  position: relative;
+  width: 100%;
+  height: 70px;
+  margin-bottom: 10px;
+}
+
+#content.content-download .download .download-top > * {
+  position: relative;
+  height: 70px;
+  float: left;
+}
+
+#content.content-download .download .download-top .download-image {
+  width: 115px;
+  display: inline-block;
+  background-size: cover;
+  background-position: center;
+}
+
+#content.content-download .download-word .download-top .download-image {
+  background-image: url(../images/home/word.gif);
+}
+
+#content.content-download .download-ppt .download-top .download-image {
+  background-image: url(../images/home/ppt.gif);
+}
+
+#content.content-download .download-excel .download-top .download-image {
+  background-image: url(../images/home/excel.gif);
+}
+
+#content.content-download .download .download-top .download-info {
+  width: calc(100% - 125px);
+  padding: 0 0 0 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+#content.content-download .download .download-top .download-info span:nth-child(2) {
+  font-weight: 300;
+}
+
+#content.content-download .download a {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  line-height: 15px;
+  padding: 10px;
+  color: white;
+  text-decoration: none;
+  text-align: center;
+  font-size: 13px;
+}
+
+#content.content-download .download-word a {
+  background: #2980b9;
+}
+
+#content.content-download .download-ppt a {
+  background: #d35400;
+}
+
+#content.content-download .download-excel a {
+  background: #27ae60;
+}

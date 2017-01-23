@@ -1,0 +1,342 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
+
+.class-colour-1 { background: #1abc9c; }
+.class-colour-2 { background: #16a085; }
+.class-colour-3 { background: #2ecc71; }
+.class-colour-4 { background: #27ae60; }
+.class-colour-5 { background: #f1c40f; }
+.class-colour-6 { background: #f39c12; }
+.class-colour-7 { background: #e67e22; }
+.class-colour-8 { background: #d35400; }
+.class-colour-9 { background: #3498db; }
+.class-colour-10 { background: #2980b9; }
+.class-colour-11 { background: #e74c3c; }
+.class-colour-12 { background: #c0392b; }
+.class-colour-13 { background: #9b59b6; }
+.class-colour-14 { background: #8e44ad; }
+.class-colour-15 { background: #34495e; }
+.class-colour-16 { background: #2c3e50; }
+
+body {
+  position: relative;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.content {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 265px);
+  margin-left: 265px;
+  min-height: 100%;
+}
+
+.content < * {
+  position: relative;
+  width: 100%;
+}
+
+.user-banner {
+  height: 200px;
+  background-size: cover;
+  background-position: center center;
+}
+
+.user-information {
+  text-align: center;
+  margin-top: -60px;
+  margin-bottom: 40px;
+}
+
+.user-information img {
+  height: 150px;
+  width: 150px;
+  border-radius: 50%;
+  border: 10px solid white;
+  background: #efefef;
+}
+
+.user-information h2, .user-information h3{
+  margin: 0;
+  padding: 0;
+  font-size: 25px;
+  font-weight: 400;
+  color: #000;
+}
+
+.user-information h3 {
+  font-size: 15px;
+  font-style: italic;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.user-information a {
+  background: #3498db;
+  padding: 5px 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-decoration: none;
+  color: white;
+  font-size: 13px;
+  margin: 0 5px;
+}
+
+.user-information a:hover {
+  background: #2980b9;
+}
+
+
+
+.user-sidebar {
+  width: 250px;
+  margin-left: 50px;
+  float: left;
+}
+
+.user-content {
+  width: calc(100% - 370px);
+  margin-left: 20px;
+  float: left;
+}
+
+.user-sidebar > div, .user-content > div {
+  background: white;
+  box-shadow: 2px 2px 5px 1px rgba(0,0,0,0.2);
+  padding: 20px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+.user-timetable {
+  color: #7f8c8d;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.user-timetable h4 {
+  margin: 0;
+  text-transform: uppercase;
+  font-weight: 300;
+  font-size: 17px;
+  margin-bottom: 15px;
+}
+
+.user-timetable .user-timetable-dates {
+  position: relative;
+  display: block;
+  width: 100%;
+  border-top: 1px solid #7f8c8d;
+  padding-top: 10px;
+}
+
+.user-timetable .user-timetable-dates .user-timetable-weekdays span {
+  text-transform: uppercase;
+  box-sizing: border-box;
+  font-size: 10px;
+  width: 30px;
+  text-align: center;
+  float: left;
+}
+
+#timetable-dates-flex {
+  position: relative;
+  width: 100%;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-content: flex-start;
+}
+
+#timetable-dates-flex .timetable-offset {
+  position: relative;
+  height: 24px;
+}
+
+#timetable-dates-flex .timetable-date {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  margin: 3px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+#timetable-dates-flex .timetable-date span::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  bottom: -2px;
+  height: 5px;
+  width: 5px;
+  left: 9.5px;
+  border-radius: 50%;
+}
+
+#timetable-dates-flex .timetable-date.free span::after {
+  background: #23FF61;
+}
+
+#timetable-dates-flex .timetable-date.busy span::after {
+  background: #e74c3c;
+}
+
+#timetable-dates-flex .timetable-date.disabled {
+  color: #bdc3c7;
+}
+
+#timetable-dates-flex .timetable-date.selected {
+  background: #ddd;
+  color: #34495e;
+}
+
+.user-timetable .user-timetable-key {
+  margin-top: 15px;
+}
+
+.user-timetable .user-timetable-key span {
+  position: relative;
+  display: block;
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+
+.user-timetable .user-timetable-key span::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  left: 10px;
+  top: 5px;
+  height: 6px;
+  width: 6px;
+  border-radius: 50%;
+  background: #23FF61;
+}
+
+.user-timetable .user-timetable-key span:nth-child(2)::before {
+  background: #e74c3c;
+}
+
+.user-content > div {
+  min-width: 340px;
+}
+
+.user-content > div h3 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.user-content > div p {
+  margin: 5px 0 10px 0;
+  color: #333;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.user-content .user-content-classes .classes-wrapper,
+.user-content .user-content-teachers .teachers-wrapper,
+.user-content .user-content-subjects .subjects-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+  margin-bottom: -10px;
+}
+
+.user-content .user-content-classes .classes-wrapper > a,
+.user-content .user-content-teachers .teachers-wrapper > a {
+  position: relative;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.user-content .user-content-classes .classes-wrapper > a {
+  margin: 0 5px 10px 5px;
+  width: 140px;
+  padding: 10px;
+  box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
+  color: #fff;
+}
+
+.user-content .user-content-classes .classes-wrapper a h5 {
+  margin: 0 0 5px 0;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: underline;
+}
+
+.user-content .user-content-classes .classes-wrapper a > span {
+  font-weight: 400;
+  font-size: 12px;
+  display: block;
+  color: #eee;
+}
+
+.user-content .user-content-classes .classes-wrapper a span span {
+  margin-right: 5px;
+  color: #fff;
+}
+
+.user-content .user-content-teachers .teachers-wrapper > a {
+  margin: 0 10px 20px 10px;
+  width: 100px;
+
+  color: #333;
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  text-align: center;
+}
+
+.user-content .user-content-teachers .teachers-wrapper > a img {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.user-content .user-content-teachers .teachers-wrapper > a > span:nth-child(2) {
+  font-weight: 400;
+  font-style: normal;
+}
+
+.user-content .user-content-subjects .subjects-wrapper > div {
+  background: #efefef;
+  margin: 0 5px 10px 5px;
+  padding: 10px;
+  box-shadow: 1px 1px 2px 1px rgba(0,0,0,0.2);
+  color: #333;
+}
+
+.user-content .user-content-subjects .subjects-wrapper > div h5 {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 400;
+  float: left;
+}
+
+.user-content .user-content-subjects .subjects-wrapper > div > span {
+  float: left;
+  padding: 10px 0 10px 5px;
+  font-weight: 300;
+  font-size: 13px;
+}
+
+.user-content .user-content-subjects .subjects-wrapper > div > span span {
+  display: block;
+  font-weight: 400;
+}

@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
+
+body {
+  position: absolute;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(../images/index/hero.gif);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.window {
+  position: relative;
+  display: none;
+  width: 40%;
+  min-width: 400px;
+  height: 500px;
+  box-sizing: border-box;
+  text-align: center;
+  padding: 50px;
+  background: white;
+  box-shadow: 2px 2px 7px 2px rgba(0,0,0,0.2);
+
+  justify-content: center;
+  align-items: center;
+}
+
+.window.active {
+  display: flex;
+}
+
+.window .window-flex {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.window .window-flex h2 {
+  position: relative;
+  display: block;
+  padding: 0 0 20px 0;
+  margin: 0;
+  font-weight: 100;
+  font-size: 32px;
+  color: black;
+}
+
+.window .window-flex h2 span {
+  font-weight: 500;
+}
+
+.window .window-flex p {
+  position: relative;
+  width: 80%;
+  margin-left: 10%;
+  line-height: 1.3;
+}
+
+.window .window-flex input, .window .window-flex select {
+  display: block;
+  width: 300px;
+  margin-left: calc(50% - 150px);
+  clear: both;
+  border: none;
+  border-bottom: 2px solid #333;
+  padding: 10px 5px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.window .window-flex select {
+  position: relative;
+  width: 310px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-radius: 0px;
+  background: none;
+  z-index: 2
+}
+
+.window .window-flex input:active, .window .window-flex input:focus, .window .window-flex select:active, .window .window-flex select:focus {
+  outline: none;
+}
+
+.window .window-flex input.incorrect, .window .window-flex select.incorrect {
+  color: #e74c3c;
+  border-bottom: 2px solid #c0392b;
+}
+
+.window .window-flex input.valid, .window .window-flex select.valid {
+  color: #2ecc71;
+  border-bottom: 2px solid #27ae60;
+}
+
+.window .window-flex .create-account-dropdown-wrap {
+  position: relative;
+}
+
+.window .window-flex .create-account-dropdown-wrap::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  width: 8px;
+  height: 8px;
+  right: 0;
+  top: 10px;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  transform: rotate(45deg);
+}
+
+/*.window .window-flex .select-arrow {
+  display: block;
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid black;
+  border-bottom: 2px solid black;
+  right: 50px;
+  margin-top: -35px;
+  transform: rotate(45deg);
+  z-index: 1;
+}*/
+
+#create-account-t-prefix-arrow.incorrect {
+  border-color: #c0392b;
+}
+
+#create-account-t-prefix-arrow.valid {
+  border-color: #27ae60;
+}
+
+.window .window-flex .btn {
+  text-decoration: none;
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 2px;
+  box-shadow: 2px 2px 3px 0px rgba(0,0,0,0.2);
+  color: white;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.window .window-flex .btn-yellow {
+  background: #f1c40f;
+}
+
+.window .window-flex .btn-red {
+  background: #e74c3c;
+}
+
+#createaccount-1 .window-flex a:nth-child(3) {
+  margin-right: 20px;
+}
+
+#createaccount-3 .window-flex a:nth-child(7), #createaccount-4 .window-flex a:nth-child(8) {
+  margin-top: 20px;
+}
+
+.window .window-flex p a, .window .window-flex p a:visited {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.window .window-flex a.regular-link {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 14px;
+}
