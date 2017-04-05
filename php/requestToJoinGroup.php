@@ -4,8 +4,8 @@
 include_once "connect.php";
 
 // get the group hash and the user hash
-$gh = $_GET['gh'];
-$uh = $_GET['uh'];
+$gh = $conn->real_escape_string($_GET['gh']);
+$uh = $conn->real_escape_string($_GET['uh']);
 
 // check whether the user hash is valid
 $checkUH = $conn->query("SELECT userID FROM userInfo WHERE link='{$uh}' LIMIT 1;");

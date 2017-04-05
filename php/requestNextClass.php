@@ -1,9 +1,9 @@
 <?php
 
-$uHash = $_GET['uh'];
-
 // include the connection to database script
 include_once "connect.php";
+
+$uHash = $conn->real_escape_string($_GET['uh']);
 
 // get the current date (with no hours or minutes or seconds) as an integer
 $timestamp = new Datetime('today', new Datetimezone('Australia/Sydney'));

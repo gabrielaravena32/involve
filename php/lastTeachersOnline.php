@@ -7,9 +7,9 @@ $timestamp = new Datetime('today', new Datetimezone('Australia/Sydney'));
 $timestamp = strtotime($timestamp->format('Y-m-d H:i:s') . PHP_EOL);
 
 // get the user ID
-$userID = $_GET['uid'];
+$userHash = $conn->real_escape_string($_GET['uh']);
 
-if($userID) {
+if($userHash) {
 
   $output = '';
 
@@ -25,7 +25,7 @@ if($userID) {
                           AND gt.groupID IN
                             (SELECT g.groupID FROM groups AS g WHERE g.groupID IN
                               (SELECT ug.groupID FROM userGroups AS ug
-                                        WHERE ug.userID={$userID})
+                                WHERE ug.userID=(SELECT userID FROM userInfo WHERE link='{$userHash}'))
                           );";
 
   // query the database with the above SQL
@@ -56,7 +56,8 @@ if($userID) {
                               WHERE g.groupID IN
                                   (SELECT ug.groupID
                                   FROM userGroups AS ug
-                                  WHERE ug.userID = {$userID}))
+                                  WHERE ug.userID = (SELECT userID FROM userInfo
+                                    WHERE link='{$userHash}')))
                           ORDER BY u.lastOnline DESC
                           LIMIT 4;";
 
@@ -84,7 +85,7 @@ if($userID) {
       if (in_array($activeTeacher['userID'], $teachersInClass)) {
         $output .= '<span>Currently in Class</span><div class="bubble bubble-yellow"></div>';
 
-      // if the teacher was last seen online within 60 seconds --> teacher is online but not in class (available)
+      // if the teacher was last seen online within 30 seconds --> teacher is online but not in class (available)
       } else if(strtotime($activeTeacher['currentTimestamp']) - strtotime($activeTeacher['lastOnline']) < 30) {
         $output .= '<span>Currently online</span><div class="bubble bubble-green"></div>';
 

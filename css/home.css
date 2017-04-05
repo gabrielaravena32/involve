@@ -8,6 +8,7 @@ body {
   height: 100%;
   width: 100%;
   font-family: 'Roboto', sans-serif;
+  background: #efefef;
 }
 
 .content {
@@ -17,21 +18,65 @@ body {
   margin-left: 265px;
   padding: 30px 60px;
   min-height: 100%;
+  text-align: center;
+  z-index: 1;
+}
+
+.content > p {
+  font-size: 13px;
+  color: #666;
+  padding: 50p 0x;
+  text-align: center;
+}
+
+.content > p span {
+  display: block;
+  font-size: 18px;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.content > p a {
+  clear: both;
+  position: relative;
+  display: inline-block;
+  margin-top: 25px;
+  padding: 4px 10px;
+  border: 1px solid #888;
+  background: none;
+  font-family: inherit;
+  color: #888;
+  line-height: 1.5;
+  font-size: 11px;
+  outline: none;
+}
+
+.content > p > a:hover {
+  color: #43c5b8;
+  border: 1px solid #43c5b8;
+  cursor: pointer;
+}
+
+.content > img {
+  position: relative;
+  width: 90%;
+  max-width: 300px;
+  margin: 0 auto;
 }
 
 .content > * {
   position: relative;
   box-sizing: border-box;
   display: block;
-  background: white;
+  text-align: left;
 }
 
 .content .post {
   width: 100%;
-  padding: 15px 30px;
-  box-shadow: 2px 2px 6px 0px rgba(0,0,0,0.2);
+  box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.3);
   max-width: 900px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  background: white;
 }
 
 .content .post > * {
@@ -41,12 +86,24 @@ body {
   padding: 10px 0;
   display: block;
   clear: both;
+  padding: 15px 30px;
 }
 
 .content .post .post-header {
-  border-bottom: 1px solid #888;
+  position: relative;
   height: 60px;
   margin-bottom: 10px;
+}
+
+.content .post .post-header:after {
+  position: absolute;
+  display: block;
+  content: " ";
+  background: #888;
+  width: calc(100% - 60px);
+  height: 1px;
+  bottom: 0;
+  left: 30px;
 }
 
 .content .post .post-header .pull-left {
@@ -113,10 +170,23 @@ body {
   background: #27ae60;
 }
 
+.content .post .post-header .pull-right .assignment-indicator.ai-1 {
+  background: #f39c12;
+}
+
+.content .post .post-header .pull-right .assignment-indicator.ai-2 {
+  background: #e74c3c;
+}
+
 .content .post .post-content {
   font-size: 14px;
   color: #555;
   line-height: 1.4;
+}
+
+.content .post .post-content h3 {
+  margin: 0 0 10px 0;
+  line-height: 1.5;
 }
 
 .content .post .post-content p {
@@ -170,21 +240,48 @@ body {
 .content .post .post-content .post-attachment .post-att-img,
 .content .post .post-content .post-attachment .post-att-word,
 .content .post .post-content .post-attachment .post-att-ppt,
-.content .post .post-content .post-attachment .post-att-excel {
+.content .post .post-content .post-attachment .post-att-excel,
+.content .post .post-content .post-attachment .post-att-pdf,
+.content .post .post-content .post-attachment .post-att-code,
+.content .post .post-content .post-attachment .post-att-zip,
+.content .post .post-content .post-attachment .post-att-text,
+.content .post .post-content .post-attachment .post-att-r-text,
+.content .post .post-content .post-attachment .post-att-undef {
   background-size: cover;
   background-position: center;
 }
 
 .content .post .post-content .post-attachment .post-att-word {
-  background-image: url(../images/home/word.gif);
+  background-image: url(../images/attachments/word.gif);
 }
 
 .content .post .post-content .post-attachment .post-att-ppt {
-  background-image: url(../images/home/ppt.gif);
+  background-image: url(../images/attachments/ppt.gif);
 }
 
 .content .post .post-content .post-attachment .post-att-excel {
-  background-image: url(../images/home/excel.gif);
+  background-image: url(../images/attachments/excel.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-pdf {
+  background-image: url(../images/attachments/pdf.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-code {
+  background-image: url(../images/attachments/code.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-zip {
+  background-image: url(../images/attachments/zip.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-text,
+.content .post .post-content .post-attachment .post-att-r-text {
+  background-image: url(../images/attachments/text.gif);
+}
+
+.content .post .post-content .post-attachment .post-att-undef {
+  background-image: url(../images/attachments/undef.gif);
 }
 
 .content .post .post-content .post-attachment > iframe:nth-child(1) {
@@ -193,17 +290,161 @@ body {
   pointer-events:none;
 }
 
-.content .post .post-content a {
+.content .post .post-content > a {
   background: #eee;
   text-decoration: none;
   color: inherit;
-  padding: 5px;
+  padding: 10px 13px;
   margin-right: 10px;
+  font-size: 12px;
   box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2);
 }
 
-.content .post .post-content a:hover {
+.content .post .post-content > a:hover {
+  color: #000;
+  background: #dedede;
+}
+
+.content .post .post-comment {
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+  display: block;
+}
+
+.content .post .post-comment > a,
+.content .post .post-comment .post-comment-section > a {
+  font-size: 13px;
+  color: #3498db;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: 40px;
+}
+
+.content .post .post-comment > a:hover,
+.content .post .post-comment .post-comment-section > a:hover {
+  color: #2A7CB2;
+  text-decoration: underline;
+}
+
+.content .post .post-comment > a.hidden {
+  display: none;
+}
+
+.content .post .post-comment .post-comment-section {
+  display: none;
+}
+
+.content .post .post-comment .post-comment-section.shown {
+  display: block;
+}
+
+.content .post .post-comment .comment {
+  margin: 10px 0;
+}
+
+.content .post .post-comment .post-comment-section .comment {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.content .post .post-comment .comment img,
+.content .post .post-comment .post-comment-section .comment img {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  float: left;
+  box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2);
+  margin-right: 10px;
+}
+
+.content .post .post-comment .post-comment-section .comment div {
+  position: relative;
+  display: inline-block;
+  font-size: 13px;
+}
+
+.content .post .post-comment .post-comment-section .comment div span a {
+  font-weight: 400;
+  color: black;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+.content .post .post-comment .post-comment-section .comment div span a:hover {
+  text-decoration: underline;
+}
+
+.content .post .post-comment .post-comment-section .comment div span {
+  color: #666;
+  font-weight: 300;
+}
+
+.content .post .post-comment .post-comment-section .comment div p {
+  margin: 5px 0 0 0;
+  line-height: 1.3;
   color: #333;
+}
+
+.content .post .post-comment .comment .comment-input {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: calc(100% - 40px);
+}
+
+.content .post .post-comment .comment .comment-input textarea {
+  position: relative;
+  width: 100%;
+  resize: none;
+  border: none;
+  background: none;
+  outline: none;
+  line-height: 2;
+  font-size: 13px;
+  font-family: 'Roboto', sans-serif;
+  padding-top: 5px;
+}
+
+.content .post .post-comment .comment .comment-input.in-use textarea {
+  border-bottom: 2px solid #555;
+}
+
+.content .post .post-comment .comment .comment-input a {
+  display: none;
+  height: auto;
+  background: #4d90fe;
+  border-radius: 2px;
+  color: white;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 8px 15px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.content .post .post-comment .comment .comment-input.in-use a:hover {
+  background: #357ae8;
+}
+
+.content .post .post-comment .comment .comment-input.in-use a {
+  display: block;
+}
+
+.content #load-more-posts {
+  display: inline-block;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 2px;
+  background: #43c5b8;
+  color: white;
+  cursor: pointer;
+}
+
+.content #load-more-posts:hover {
+  background: #3eb8be;
 }
 
 @media (max-width: 1100px) {

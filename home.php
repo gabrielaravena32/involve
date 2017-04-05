@@ -1,76 +1,27 @@
 <?php
 
-// start the session (keep user logged in)
-session_start();
+// set the page selection to feed
+$navPageSel = 'feed';
 
 // include the connect script
 include_once "php/connect.php";
 
-// create an empty array to hold the current user's information
-$userInfo = [];
+// the path for a redirect to home
+$path = '.';
+// include the redirect script
+include_once "php/redirect.php";
 
-// if the session doesn't have a token set (not logged in)
-if (!$_SESSION['token']) {
+// the number of posts to load initially (there is a load more button)
+$numPostsToLoad = 20;
 
-  // destroy the session created at the top of the page
-  session_destroy();
-
-  // send the user to the home page
-  header("Location: .");
-
-  // if the user is logged in
-} else {
-  // select the user information from the database where the user's token is correct
-  $sql = "SELECT * FROM userInfo WHERE userID=(SELECT userID FROM users WHERE token='{$_SESSION['token']}');";
-  $result = $conn->query($sql);
-
-  // if there is a user with that token
-  if ($result->num_rows == 1) {
-    // set the array $userInfo to hold the information (not stored in $_SESSION making it more secure)
-    $userInfo = $result->fetch_assoc();
-
-  // else if the user's stored token doesn't match any in the database
-  } else {
-    // destroy session data (token and any other information)
-    session_destroy();
-
-    // send the user to the homepage
-    header("Location: .");
-  }
-}
-
-// Function to convert a mysql Date object into a more different format (given the date)
-// Result: 2016-12-29 18:13:01 --> Tomorrow at 6:13pm or 2016-12-30 02:30:00 --> Today at 2:30am
-function timeToWords($d) {
-  // convert the date into a unix timestamp (seconds)
-  $d = strtotime($d);
-
-  // create a time for 'today' at midnight (e.g. beginning of the day within no hours and seconds)
-  $currentDay = new Datetime('today', new Datetimezone('Australia/Sydney'));
-  $currentDay = strtotime($currentDay->format('Y-m-d H:i:s') . PHP_EOL);
-
-  // if the date is more than two days from the current morning (e.g. not today or tomorrow)
-  // or if the date is reverse of that (not yesterday)
-  if($d > $currentDay + (2*24*60*60) || $d < $currentDay - (24*60*60)) {
-    // if the year is not the same
-    if(date("Y",$d) != date("Y", $currentDay)) {
-      return date("d M Y",$d);
-    }
-    return date("d M",$d);
-
-    // the date is either yesterday, today or tomorrow
-    // if the day has the same date as today
-  } else if(date("Y-m-d", $d) == date("Y-m-d", $currentDay)) {
-    return "Today ".date("g:ia",$d);
-
-  // the date is either yesterday or today
-  // if the date is greater than today (tomorrow)
-  } else if($d > $currentDay) {
-    return "Tomorrow ".date("g:ia", $d);
-  }
-  // the date can only be yesterday
-  return "Yesterday ".date("g:ia", $d);
-}
+// the number of posts available to the user
+$numPostsQuery = $conn->query("SELECT COUNT(p.postID) AS num
+                                FROM posts AS p
+                                WHERE
+                                  p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID={$userInfo['userID']})
+                                  OR
+                                  p.`groupID` IN (SELECT groupID FROM groups WHERE teacherID={$userInfo['userID']});");
+$numPosts = $numPostsQuery->fetch_assoc()['num'];
 
 ?>
 <!DOCTYPE html>
@@ -80,231 +31,229 @@ function timeToWords($d) {
     <title>Involve | Home</title>
 
     <link rel="stylesheet" href="css/home.css">
-    <script src="js/home.js"></script>
   </head>
   <body>
 
     <?php include_once "includes/sidebar-left.php"; ?>
 
     <!-- Page content -->
-    <div class="content" id="content">
-
-      <!-- Posts -->
-      <?php
-
-      // prepareSQL to get all posts from relevant groups
-      // returns the date of post, due date of assignments, type of post, teachers name (prefix and lastName e.g. Mr, Smith),
-      //     the teachers photo, the classes' ID and the class's name
-      $postSQL = "SELECT p.date, p.due, p.text, p.type, p.postID, p.postHash, ui.userID, ui.prefix, ui.firstName, ui.lastName, ui.photo, ui.link, g.groupName, g.groupLink FROM
-                    (posts AS p RIGHT JOIN userInfo AS ui ON p.`userID` = ui.`userID`)
-                    RIGHT JOIN groups AS g ON p.`groupID` = g.`groupID`
-                  WHERE
-                  	p.`groupID` IN (SELECT groupID FROM userGroups WHERE userID={$userInfo['userID']})
-                    OR
-                    p.`groupID` IN (SELECT groupID FROM groups WHERE teacherID={$userInfo['userID']})
-                  ORDER BY p.date DESC
-                  LIMIT 20;";
-
-      // query the database with relevant query
-      $postQuery = $conn->query($postSQL);
-
-      // function to return the the title of a webpage given a URL
-      // needed because link's can have dynamic titles
-      // Credit: http://stackoverflow.com/questions/4348912/get-title-of-website-via-link
-      function get_title($url){
-        $str = file_get_contents($url);
-        if(strlen($str)>0){
-          $str = trim(preg_replace('/\s+/', ' ', $str)); // supports line breaks inside <title>
-          preg_match("/\<title\>(.*)\<\/title\>/i",$str,$title); // ignore case
-          return $title[1];
-        }
-      }
-
-      $attachmentSQL = "SELECT a.postID, f.fileName, f.fileIntUrl, f.fileExtUrl, f.fileType, f.internalBlob
-                        FROM
-                        	attachments AS a
-                        	RIGHT JOIN files AS f ON f.fileID = a.fileID
-                        WHERE a.postID IN
-                          (SELECT * FROM (SELECT postID FROM posts
-                            WHERE
-                              groupID IN (SELECT groupID FROM userGroups WHERE userID={$userInfo['userID']})
-                              OR
-                              groupID IN (SELECT groupID FROM groups WHERE teacherID={$userInfo['userID']})
-                          ORDER BY date DESC
-                          LIMIT 20) temp_tab);";
-
-      $attachmentResult = $conn->query($attachmentSQL);
-      $attachments = [];
-
-      if($attachmentResult->num_rows > 0) {
-        while($aRow = $attachmentResult->fetch_assoc()) {
-          if(!$attachments[$aRow['postID']]) {
-            $attachments[$aRow['postID']] = [];
-          }
-          $attachments[$aRow['postID']][] = [$aRow['fileName'], $aRow['fileIntUrl'], $aRow['fileExtUrl'], $aRow['fileType'], $aRow['internalBlob']];
-        }
-      }
-
-      // prepare an output
-      $output = '';
-
-      // if there are posts --> loop through all posts individually
-      if ($postQuery->num_rows > 0) {
-        while($post = $postQuery->fetch_assoc()) {
-
-          $attachmentOutput = '';
-          $atts = $attachments[$post['postID']];
-          if($atts) {
-            foreach($atts as $att) {
-              $attachmentOutput .= '';
-              switch($att[3]) {
-                case 'img':
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
-                                          <div class="post-att-img" style="background-image: url('.$att[2].');"></div>
-                                          <div class="post-att-info">
-                                            <span>'.$att[0].'</span>
-                                            <span>Image</span>
-                                          </div>
-                                        </a>';
-                  break;
-
-                case 'url':
-                  $attachmentOutput .= '<a class="post-attachment" href="'.$att[2].'" target="_blank">
-                                          <iframe src="'.$att[2].'" sandbox></iframe>
-                                          <div class="post-att-info">
-                                            <span>'.get_title($att[2]).'</span>
-                                            <span>'.$att[2].'</span>
-                                          </div>
-                                        </a>';
-                  break;
-
-                case 'pdf':
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
-                                          <div class="post-att-img" style="background-image: url(data:image/jpeg;base64,' .  base64_encode($att[4]).');"></div>
-                                          <div class="post-att-info">
-                                            <span>'.$att[0].'</span>
-                                            <span>PDF</span>
-                                          </div>
-                                        </a>';
-                  break;
-
-                case 'html':
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'"></a>';
-                  break;
-
-                case 'word':
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
-                                          <div class="post-att-word"></div>
-                                          <div class="post-att-info">
-                                            <span>'.$att[0].'</span>
-                                            <span>Word</span>
-                                          </div>
-                                        </a>';
-                  break;
-
-                case 'ppt':
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
-                                          <div class="post-att-word"></div>
-                                          <div class="post-att-info">
-                                            <span>'.$att[0].'</span>
-                                            <span>Powerpoint</span>
-                                          </div>
-                                        </a>';
-                  break;
-
-                case 'excel':
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'">
-                                          <div class="post-att-word"></div>
-                                          <div class="post-att-info">
-                                            <span>'.$att[0].'</span>
-                                            <span>Excel</span>
-                                          </div>
-                                        </a>';
-                  break;
-
-                default:
-                  $attachmentOutput .= '<a class="post-attachment" href="file/'.$att[1].'"></a>';
-                  break;
-              }
-            }
-            $attachmentOutput .= '<br>';
-          }
-
-          // get the type of the post (e.g. assignment or text)
-          $type = $post['type'];
-          // if the post is text
-          if($type === 't') {
-            // output of regular text post
-            $output .= '<div class="post"><div class="post-header"><div class="pull-left">';
-
-            // If it is your post
-            if($post['userID'] === $userInfo['userID']) {
-              // say 'You' instead of your name
-              $output .= '<img src="'.$post["photo"].'" alt="Your profile photo">
-                        <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">You</a>';
-            // else: not your post
-            } else {
-              // if a teacher's post
-              if($post['prefix']) {
-                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["prefix"].' '.$post["lastName"].'">
-                          <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'.$post["prefix"]
-                          .' '.$post["lastName"].'</a>';
-              // else: student's post
-              } else {
-                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["firstName"].' '.$post["lastName"].'">
-                          <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'.$post["firstName"]
-                          .' '.$post["lastName"].'</a>';
-              }
-            }
-            // add the rest of the text
-            $output .= ' to <a href="group/'.$post["groupLink"].'">'.$post["groupName"].'</a></span><span class="post-date">'.timeToWords($post['date']).
-                        '</span></div></div></div><div class="post-content"><p>'.$post['text'].'</p>'.$attachmentOutput.'<a href="" id="post-comment-'
-                        .$post['postHash'].'" class="post-content-comment">Add Comment</a></div></div>';
-
-          // else: if the post is an assignment
-          } else if($type === 'a'){
-            // output of an assignment post
-            $output .= '<div class="post post-assignment"><div class="post-header"><div class="pull-left">';
-
-            // if this is your post
-            if ($post['userID'] === $userInfo['userID']) {
-              // say 'You' instead of name
-              $output .= '<img src="'.$post["photo"].'" alt="Your profile photo"><div class="post-image-container">'.
-                          '<span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">You</a>';
-            // else: not your post
-            } else {
-              // if teacher post
-              if($post['prefix']) {
-                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["prefix"].' '.$post["lastName"].'">
-                <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'
-                .$post["prefix"].' '.$post["lastName"].'</a>';
-              // else: student
-              } else {
-                $output .= '<img src="'.$post["photo"].'" alt="Profile photo of '.$post["firstName"].' '.$post["lastName"].'">
-                <div class="post-image-container"><span class="post-title"><a class="post-title-teacher" href="user/'.$post['link'].'">'
-                .$post["firstName"].' '.$post["lastName"].'</a>';
-              }
-
-            }
-            // add the rest of the assignment text
-            $output .= ' to <a href="group/'.$post["groupLink"].'">'.$post["groupName"]
-                      .'</a></span><span class="post-date">'.timeToWords($post['date']).'
-                      </span></div></div><div class="pull-right"><div class="assignment-indicator ai-0">Due
-                      '.timeToWords($post['due']).'</div></div></div>
-                      <div class="post-content"><p>'.$post['text'].'</p>'.$attachmentOutput.'<a href="" id="post-handin-'
-                      .$post['postHash'].'" class="post-assignment-handin">Hand In</a><a href="" id="post-comment-'
-                      .$post['postHash'].'" class="post-content-comment">Add Comment</a></div></div>';
-          }
-        }
-      }
-      // print the output to the screen
-      echo $output;
-      ?>
-
-      <!-- End with a load more -->
-    </div>
+    <div class="content" id="content"><p>Loading...</p></div>
 
     <!-- sidebar on right -->
     <?php include_once "includes/sidebar-right.php"; ?>
+
+    <!-- User Action -->
+    <?php include_once "includes/user-action.php"; ?>
+
+    <script>
+      // Create a dynamic textbox
+      // I modified the code a bit to work for my case but this should be good
+      // Credit: http://stackoverflow.com/questions/454202/creating-a-textarea-with-auto-resize
+      var observe;
+      if (window.attachEvent) {
+          observe = function (element, event, handler) {
+              element.attachEvent('on'+event, handler);
+          };
+      }
+      else {
+          observe = function (element, event, handler) {
+              element.addEventListener(event, handler, false);
+          };
+      }
+
+      function init (elem) {
+        function resize (e) {
+          elem.className = '';
+          elem.style.height = 'auto';
+          if(elem.scrollHeight === 0) {
+            elem.style.height = '28px';
+          } else if(elem.scrollHeight > window.innerHeight/2) {
+            elem.style.height = (window.innerHeight/2)+'px';
+          } else {
+            elem.style.height = elem.scrollHeight+'px';
+          }
+        }
+        function delayedResize (e) {
+          window.setTimeout(function() {
+            resize(e);
+          }, 0);
+        }
+        observe(elem, 'change',  function() { resize(elem); });
+        observe(elem, 'cut',     function() { delayedResize(elem); });
+        observe(elem, 'paste',   function() { delayedResize(elem); });
+        observe(elem, 'drop',    function() { delayedResize(elem); });
+        observe(elem, 'keydown', function() { delayedResize(elem); });
+        resize(elem);
+      }
+
+      // make the textarea dynamic
+      var text = document.getElementById('create-post-input-text');
+      init(text);
+
+      // create an array of all the textareas already initialised
+      var alreadyInit = [];
+
+      // function called every time a comment input is clicked
+      var setInit = function(code) {
+        // if the comment input has NOT already been initialised
+        if(alreadyInit.indexOf(code) === -1) {
+
+          // initialise it
+          init(document.getElementById('comment-text-'+code));
+
+          // add it to the array
+          alreadyInit.push(code);
+
+          // change the display of the element
+          document.getElementById('comment-input-'+code).className = 'comment-input in-use';
+        } else {
+          // change the display of the element
+          document.getElementById('comment-input-'+code).className = 'comment-input in-use';
+        }
+      };
+
+      // clear the comment post button
+      var clearAppearance = function(code) {
+        // if there is no text in the comment
+        if (document.getElementById('comment-text-'+code).value == '') {
+          // remove styling
+          document.getElementById('comment-input-'+code).className = 'comment-input';
+        }
+      };
+
+      // show comments
+      var showComments = function(code) {
+        document.getElementById('post-comment-show-'+code).className = 'hidden';
+        document.getElementById('post-comment-section-'+code).className = 'post-comment-section shown';
+      };
+
+      // hide comments
+      var hideComments = function(code) {
+        document.getElementById('post-comment-show-'+code).className = '';
+        document.getElementById('post-comment-section-'+code).className = 'post-comment-section';
+      };
+
+
+      // make a comment
+      var commentOnPost = function(code) {
+        // get the comment text
+        var text = document.getElementById('comment-text-'+code).value;
+
+        // set up a request
+        var request;
+        if (window.XMLHttpRequest) {
+          request = new XMLHttpRequest();
+        } else {
+          request = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        // on return of information from AJAX request
+        request.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            // the comment was successful
+            if(this.responseText != 0) {
+              // get the element that the comment will move into
+              var commentSection = document.getElementById('post-comments-html-'+code);
+              // add the comment into the element
+              commentSection.innerHTML = commentSection.innerHTML + '<div class="comment"><img src="<?php echo $userInfo['photo']; ?>" /><div><span><a href="user"><?php echo $userInfo['firstName'].' '.$userInfo['lastName']; ?></a> Right Now</span><p>'+this.responseText+'</p></div></div>';
+
+              // clear the comment input
+              document.getElementById('comment-text-'+code).value = '';
+              // show the comment section (if not already shown)
+              showComments(code);
+              // remove the comment input styling
+              clearAppearance(code);
+            }
+          }
+        };
+
+        // send the request to the php file: testEmail.php with the inputted email
+        request.open('GET', 'php/addComment.php?p='+code+'&u=<?php echo $userInfo['link']; ?>&t='+ encodeURIComponent(text), true);
+        request.send();
+      };
+
+      // Remove an HTML element
+      // Credit: http://stackoverflow.com/questions/3387427/remove-element-by-id
+      Element.prototype.remove = function() {
+        this.parentElement.removeChild(this);
+      }
+      NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+        for(var i = this.length - 1; i >= 0; i--) {
+          if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+          }
+        }
+      }
+
+      // variables for the posts loading
+      var numberOfPostsAvailableToUser = <?php echo $numPosts; ?>,
+          numCurrentPosts = 0,
+          contentElem = document.getElementById('content');
+
+      var loadPosts = function() {
+        if (numCurrentPosts < numberOfPostsAvailableToUser) {
+          var request;
+
+          // set the correct request type (AJAX)
+          if (window.XMLHttpRequest) {
+            request = new XMLHttpRequest();
+          } else {
+            request = new ActiveXObject("Microsoft.XMLHTTP");
+          }
+
+          // on return of information from AJAX request
+          request.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+
+              // if there is a load more posts button remove it
+              if(document.getElementById('load-more-posts')) {
+                document.getElementById('load-more-posts').remove();
+              }
+
+              if(contentElem.innerHTML == '<p>Loading...</p>') {
+                contentElem.innerHTML = '';
+              }
+
+              // add the HTML from the request to the element on this page
+              contentElem.innerHTML = contentElem.innerHTML + this.responseText;
+
+              // add to the number of current posts the number of most number of posts added
+              numCurrentPosts = numCurrentPosts + <?php echo $numPostsToLoad; ?>;
+
+              // if there are more posts not shown add a 'load more posts' button
+              if (numCurrentPosts < numberOfPostsAvailableToUser) {
+                contentElem.innerHTML = contentElem.innerHTML + '<a id="load-more-posts" onclick="loadPosts()">Load More Posts</a>';
+              } else {
+                contentElem.innerHTML = contentElem.innerHTML + '<p>All done, no more posts to load.</p>';
+              }
+            }
+          };
+
+          // create the default URL
+          var url = 'php/requestLoadPosts.php?uh=<?php echo $userInfo['link']; ?>&ntl=<?php echo $numPostsToLoad; ?>&np=' + numCurrentPosts;
+
+          // if there are no posts on the screen add the f=1 identifier to show it is the first post
+          if(numCurrentPosts === 0) {
+            url = 'php/requestLoadPosts.php?uh=<?php echo $userInfo['link']; ?>&ntl=<?php echo $numPostsToLoad; ?>&f=1';
+          }
+
+          // send the request to the php file: testEmail.php with the inputted email
+          request.open('GET', url, true);
+          request.send();
+
+        // else: there are no posts to load
+        } else {
+          // if there is a button (for some reason)
+          if (document.getElementById('load-more-posts')) {
+            // remove the button
+            document.getElementById('load-more-posts').remove();
+          }
+
+          contentElem.innerHTML = '<img class="no-posts-img" src="images/tutorial/no-posts.png"><p><span>You have no posts to view yet.</span>Try joining a class or creating a post for your class.<br><br><a onclick="toggleJoinClass()">+ Join A Class</a></p>';
+        }
+      }
+
+      loadPosts();
+    </script>
   </body>
 </html>

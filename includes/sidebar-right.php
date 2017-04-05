@@ -5,6 +5,8 @@
   $timestamp = new Datetime('today', new Datetimezone('Australia/Sydney'));
   $timestamp = strtotime($timestamp->format('Y-m-d H:i:s') . PHP_EOL);
 
+  echo "TODO: Fix the current class / time feature";
+
   // SQL query to select all the classes that the user has that day
   // returns the className, time class starts, length of class, and the prefix and last name of teacher (e.g. Mr, Smith)
   $currentClassSQL = "SELECT g.groupName, gt.time, gt.length, ui.prefix, ui.lastName FROM
@@ -109,6 +111,7 @@
     padding: 10px 15px;
     margin-bottom: 20px;
     box-shadow: 2px 2px 6px 3px rgba(0,0,0,0.2);
+    background: white;
   }
 
   #sidebar-right #current-class {
@@ -186,7 +189,12 @@
     position: relative;
   }
 
-  #active-teachers .active-user {
+  #active-teacher-javascript-container p {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  #active-teacher-javascript-container .active-user {
     width: 100%;
     padding: 2px 0;
     height: 40px;
@@ -194,7 +202,7 @@
     font-size: 13px;
   }
 
-  #active-teachers .active-user img {
+  #active-teacher-javascript-container .active-user img {
     height: 25px;
     width: 25px;
     border-radius: 50%;
@@ -203,19 +211,19 @@
     margin-top: 10px;
   }
 
-  #active-teachers .active-user .active-user-right {
+  #active-teacher-javascript-container .active-user .active-user-right {
     position: relative;
     padding: 10px 0;
   }
 
-  #active-teachers .active-user .active-user-right a {
+  #active-teacher-javascript-container .active-user .active-user-right a {
     text-decoration: none;
     font-weight: 500;
     color: #7f8c8d;
     display: block;
   }
 
-  #active-teachers .active-user .active-user-right .bubble {
+  #active-teacher-javascript-container .active-user .active-user-right .bubble {
     position: absolute;
     right: 0;
     top: 20px;
@@ -224,13 +232,13 @@
     border-radius: 50%;
   }
 
-  #active-teachers .active-user .active-user-right .bubble-green {
+  #active-teacher-javascript-container .active-user .active-user-right .bubble-green {
     background: #27ae60;
   }
-  #active-teachers .active-user .active-user-right .bubble-yellow {
+  #active-teacher-javascript-container .active-user .active-user-right .bubble-yellow {
     background: #f1c40f;
   }
-  #active-teachers .active-user .active-user-right .bubble-red {
+  #active-teacher-javascript-container .active-user .active-user-right .bubble-red {
     background: #c0392b;
   }
 
@@ -238,7 +246,7 @@
 
 <script>
 
-var currentClassBarElem = document.getElementById('current-class-progress');
+var currentClassBarElem;
 var progress, length, nextProgressBarUpdate;
 var newClass = false;
 
@@ -320,10 +328,13 @@ function progressBar() {
     // set the width of the progress bar
     currentClassBarElem.style.width = (progress/length)*100 + "%";
   }
-}
+};
+
 
 // if the class bar has the load atribute
-if(document.getElementById('current-class-bar').getAttribute('data-load') === 'true') {
+if(document.getElementById('current-class-bar')) {
+
+  currentClassBarElem = document.getElementById('current-class-progress');
 
   // get the initial progress and length as dictated by database
   progress = parseInt(currentClassBarElem.getAttribute("data-progress"));
@@ -338,11 +349,6 @@ if(document.getElementById('current-class-bar').getAttribute('data-load') === 't
   nextProgressBarUpdate = setInterval(progressBar, 60000);
 }
 
-
-
-
-
-var userID = <?php echo $userInfo['userID']; ?>;
 var lastTeacherElem = document.getElementById('active-teacher-javascript-container');
 var nextLastOnline;
 
@@ -359,12 +365,16 @@ var getLastOnline = function() {
   // on return of information from AJAX request
   request.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      lastTeacherElem.innerHTML = this.responseText;
+      if(this.responseText === '') {
+        lastTeacherElem.style.display = 'none';
+      } else {
+        lastTeacherElem.innerHTML = this.responseText;
+      }
     }
   };
 
   // send the request to the php file: testEmail.php with the inputted email
-  request.open('GET', 'php/lastTeachersOnline.php?uid=' + userID);
+  request.open('GET', 'php/lastTeachersOnline.php?uh=<?php echo $userInfo['link']; ?>');
   request.send();
 
   nextLastOnline = setTimeout(getLastOnline, 29000);

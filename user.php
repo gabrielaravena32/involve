@@ -1,79 +1,48 @@
-
 <?php
-
-// start the session (keep user logged in)
-session_start();
 
 // include the connect script
 include_once "php/connect.php";
 
-// function to send people homewhich is harder than I would have expected
-// owing to a funny problem to do with URL rewriting.
-// if you're interested scroll down to the start of the HTML and I have written
-// some information on what is happening
-function sendHome() {
-  // get the requested URL ending
-  // e.g. if user typed website.com/user/userCode/
-  //      it would be 'user/userCode/'
-  $url = $_SERVER['REQUEST_URI'];
+// create a blank path string
+$path = '';
 
-  // check whether the last character is a '/'
-  if(substr($url,-1) === '/') {
+// get the requested URL ending
+// e.g. if user typed website.com/user/userCode/
+//      it would be 'user/userCode/'
+$url = $_SERVER['REQUEST_URI'];
 
-    // check whether the 8 characters before the / are the user code
-    if(substr($url,(strlen($link)*-1)-1,-1) === $link) {
-      // user/userCode/
-      // so send the user to home.php which is two directories back
-      header("Location: ../../");
-    } else {
-      // user/
-      // so sen the user to home.php which is one directory back
-      header("Location: ../");
-    }
+// get the page link
+$pageLink = $conn->real_escape_string($_GET['uid']);
+
+// check whether the last character is a '/'
+if(substr($url,-1) === '/') {
+
+  // check whether the 8 characters before the / are the user code
+  if(substr($url,(strlen($pageLink)*-1)-1,-1) === $pageLink) {
+    // user/userCode/
+    // so send the user to home.php which is two directories back
+    $path = '../../';
   } else {
-
-    // check whether the last 9 characters are /userCode
-    if(substr($url,(strlen($link)*-1)-1) === "/".$link) {
-      // user/userCode
-      // so send the user to home.php which is one directory back
-      header("Location: ../");
-    } else {
-      // user.php?uid=userCode and user
-      // both cases the home.php file is in the same directory (send them there)
-      header("Location: .");
-    }
+    // user/
+    // so sen the user to home.php which is one directory back
+    $path = '../';
   }
-}
-
-// create an empty array to hold the current user's information
-$userInfo = [];
-
-// if the session doesn't have a token set (not logged in)
-if (!$_SESSION['token']) {
-
-  // destroy the session created at the top of the page and send them to home.php
-  session_destroy();
-  sendHome();
-
-
-// else: if the user is logged in
 } else {
-  // select the user's information from the database where the user's token is correct
-  $sql = "SELECT * FROM userInfo WHERE userID=(SELECT userID FROM users WHERE token='{$_SESSION['token']}');";
-  $result = $conn->query($sql);
 
-  // if there is a user with that token
-  if ($result->num_rows == 1) {
-    // set the array $userInfo to hold the information (not stored in $_SESSION making it more secure)
-    $userInfo = $result->fetch_assoc();
-
-  // else if the user's stored token doesn't match any in the database
+  // check whether the last 9 characters are /userCode
+  if(substr($url,(strlen($pageLink)*-1)-1) === "/".$pageLink) {
+    // user/userCode
+    // so send the user to home.php which is one directory back
+    $path = '../';
   } else {
-    // destroy session data (token and any other information) and send them to home.php
-    session_destroy();
-    sendHome();
+    // user.php?uid=userCode and user
+    // both cases the home.php file is in the same directory (send them there)
+    $path = '.';
   }
 }
+
+// include the redirect script
+include_once "php/redirect.php";
 
 // --- get the information for the profile to be displayed on the page
 // set up a variable for the page user's information
@@ -93,9 +62,12 @@ if($pageLink === 'self') {
 }
 
 // search database for user with the correct link
-$sql = "SELECT u.type, ui.*, s.schoolName FROM
-        (userInfo AS ui RIGHT JOIN schools AS s ON ui.school = s.id)
-        RIGHT JOIN users AS u ON ui.userID=u.userID
+$sql = "SELECT u.type, ui.*,
+        CASE
+          WHEN ui.school > 0 THEN (SELECT s.schoolName FROM schools AS s WHERE s.id = ui.school)
+          ELSE ''
+        END AS schoolName
+        FROM userInfo AS ui RIGHT JOIN users AS u ON ui.userID=u.userID
         WHERE ui.link='{$pageLink}';";
 $result = $conn->query($sql);
 
@@ -103,9 +75,6 @@ $result = $conn->query($sql);
 if ($result->num_rows != 1) {
 
   echo 'user doesn\'t exist';
-
-
-
 
 // else: a user was found with that userID
 } else {
@@ -159,27 +128,7 @@ if ($result->num_rows != 1) {
   // get what the user typed into the URL
   // e.g. if user typed website.com/user/userCode/
   //      it would be 'user/userCode/'
-  $url = $_SERVER['REQUEST_URI'];
-
-  // check whether the last character is a '/'
-  if(substr($url,-1) === '/') {
-
-    // check whether the 8 characters before the / are the user code
-    if(substr($url,-9,-1) === $pageLink) {
-      // user/userCode/
-      $output .= '<base href="../../">';
-    } else {
-      // user/
-      $output .= '<base href="../">';
-    }
-  } else {
-
-    // check whether the last 9 characters are /userCode
-    if(substr($url,-9) === "/".$pageLink) {
-      // user/userCode
-      $output .= '<base href="../">';
-    } // else (both other cases): user.php?uid=userCode and user do not require any code
-  }
+  $output = '<base href="'.$path.'" />';
 
   // add to the output the end of the head and body element
   $output .= '<link rel="stylesheet" href="css/user.css"></head><body>';
@@ -497,7 +446,7 @@ if ($result->num_rows != 1) {
   // else: there were no classes for the user
   } else {
     // output a statment saying such
-    $output = '<div class="user-content-classes"><h3>Classes</h3>
+    $output .= '<div class="user-content-classes"><h3>Classes</h3>
                 <p>'.$pageInfo['name'].' currently does not have any classes.
                 </p>
               </div>';
@@ -591,5 +540,4 @@ if ($result->num_rows != 1) {
   // print the output to the screen
   echo $output;
 }
-
 ?>

@@ -1,44 +1,26 @@
-
 <?php
-
-// start the session (keep user logged in)
-session_start();
 
 // include the connect script
 include_once "php/connect.php";
 
-// create an empty array to hold the current user's information
-$userInfo = [];
+// create a blank path
+$path = '';
 
-// if the session doesn't have a token set (not logged in)
-if (!$_SESSION['token']) {
+// get the requested URL
+$url = $_SERVER['REQUEST_URI'];
 
-  // destroy the session created at the top of the page
-  session_destroy();
-
-  // send the user to the home page
-  header("Location: .");
-
-  // if the user is logged in
+// check whether the last character is a '/'
+if(substr($url,-1) === '/') {
+  // if so then the path back to home is ../../
+  $path = '../../.';
 } else {
-  // select the user information from the database where the user's token is correct
-  $sql = "SELECT * FROM userInfo WHERE userID=(SELECT userID FROM users WHERE token='{$_SESSION['token']}');";
-  $result = $conn->query($sql);
-
-  // if there is a user with that token
-  if ($result->num_rows == 1) {
-    // set the array $userInfo to hold the information (not stored in $_SESSION making it more secure)
-    $userInfo = $result->fetch_assoc();
-
-  // else if the user's stored token doesn't match any in the database
-  } else {
-    // destroy session data (token and any other information)
-    session_destroy();
-
-    // send the user to the homepage
-    header("Location: .");
-  }
+  // else the path abck is ../
+  $path = '../.';
 }
+
+// include the redirect script
+include_once "php/redirect.php";
+
 
 // get the file URL
 $file = $_GET['f'];
@@ -57,8 +39,6 @@ if(!$file) {
     <meta charset="utf-8">
 
 <?
-
-$url = $_SERVER['REQUEST_URI'];
 
 // check whether the last character is a '/'
 if(substr($url,-1) === '/') {
@@ -168,8 +148,78 @@ if ($fileResult->num_rows == 1) {
                   </div>';
       break;
 
+    case 'code':
+      $output .= '<div id="content" class="content-download">
+                    <div class="download download-code">
+                      <div class="download-top">
+                        <div class="download-image"></div>
+                        <div class="download-info">
+                          <span>'.$fileInfo['name'].'</span>
+                          <span>Code File</span>
+                        </div>
+                      </div>
+                      <a href="'.$fileInfo['url'].'" download>Download</a>
+                    </div>
+                  </div>';
+      break;
+
+    case 'zip':
+      $output .= '<div id="content" class="content-download">
+                    <div class="download download-zip">
+                      <div class="download-top">
+                        <div class="download-image"></div>
+                        <div class="download-info">
+                          <span>'.$fileInfo['name'].'</span>
+                          <span>ZIP Folder</span>
+                        </div>
+                      </div>
+                      <a href="'.$fileInfo['url'].'" download>Download</a>
+                    </div>
+                  </div>';
+      break;
+
+    case 'text':
+      $output .= '<div id="content" class="content-text">
+                    <div class="text-navbar">
+                      <span>'.$fileInfo['name'].'</span>
+                      <a href="'.$fileInfo['url'].'" download>Download</a>
+                    </div>
+                    <iframe src="'.$fileInfo['url'].'"></iframe>
+                  </div>';
+      break;
+
+    case 'r-text':
+      $output .= '<div id="content" class="content-download">
+                    <div class="download download-r-text">
+                      <div class="download-top">
+                        <div class="download-image"></div>
+                        <div class="download-info">
+                          <span>'.$fileInfo['name'].'</span>
+                          <span>Rich Text File</span>
+                        </div>
+                      </div>
+                      <a href="'.$fileInfo['url'].'" download>Download</a>
+                    </div>
+                  </div>';
+      break;
+
+    case 'undef':
+      $output .= '<div id="content" class="content-download">
+                    <div class="download download-undef">
+                      <div class="download-top">
+                        <div class="download-image"></div>
+                        <div class="download-info">
+                          <span>'.$fileInfo['name'].'</span>
+                          <span>Unknown File Type</span>
+                        </div>
+                      </div>
+                      <a href="'.$fileInfo['url'].'" download>Download</a>
+                    </div>
+                  </div>';
+      break;
+
     default:
-      $output .= 'havent added support for this file type yet';
+      $output .= 'An error has occured';
       break;
   }
 
@@ -179,10 +229,10 @@ if ($fileResult->num_rows == 1) {
   $result = $conn->query("SELECT 1 FROM files WHERE fileIntUrl='{$file}';");
   // if there is a result from the sql query - there is a file but they dont have access
   if($result->num_rows == 1) {
-    echo 'no access';
+    echo '<!DOCTYPE html>no access';
   // else: the file does not exist
   } else {
-    echo 'doesnt exist';
+    echo '<!DOCTYPE html>doesnt exist';
   }
 }
 

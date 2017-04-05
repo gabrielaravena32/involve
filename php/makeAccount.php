@@ -118,11 +118,11 @@ $uiSQL = '';
 // if the user is a teacher
 if($type == 't') {
   // add the information (including prefix)
-  $uiSQL = "INSERT INTO userInfo (userID, firstName, lastName, prefix, link) VALUES ({$id}, '{$first}', '{$last}', '{$prefix}', substring(MD5({$id}), 1, 8));";
+  $uiSQL = "INSERT INTO userInfo (userID, firstName, lastName, prefix) VALUES ({$id}, '{$first}', '{$last}', '{$prefix}');";
 // else: the user is a student
 } else {
   // add the information (with a null prefix)
-  $uiSQL = "INSERT INTO userInfo (userID, firstName, lastName, link) VALUES ({$id}, '{$first}', '{$last}', substring(MD5({$id}), 1, 8));";
+  $uiSQL = "INSERT INTO userInfo (userID, firstName, lastName) VALUES ({$id}, '{$first}', '{$last}');";
 }
 $query = $conn->query($uiSQL);
 

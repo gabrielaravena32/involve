@@ -24,7 +24,7 @@ if($email && $pwd) {
       if (password_verify($pwd, $row['password'])) {
 
         // generate a randomised 60-digit token (to be used to verify user without storing password or easily modified user id)
-        $token = password_hash(bin2hex(openssl_random_pseudo_bytes(10)), PASSWORD_BCRYPT, ['cost'=>4]);
+        $token = password_hash(bin2hex(openssl_random_pseudo_bytes(10)), PASSWORD_BCRYPT, ['cost'=>10]);
         $_SESSION['token'] = $token;
 
         // add the token to the mysql db

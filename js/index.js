@@ -85,7 +85,6 @@ function enableScroll() {
 
 // sign in link
 document.getElementById('nav-signin').onclick = function(e) {
-  console.log('abc');
   e.preventDefault();
   signinClick();
 };

@@ -67,13 +67,55 @@ body {
   box-sizing: border-box;
 }
 
-#content.content-pdf iframe {
+.content-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+#content.content-pdf iframe,
+#content.content-text iframe {
   position: relative;
   width: 100%;
   height: 100%;
   border: none;
   margin: 0;
   padding: 0;
+}
+
+#content.content-text iframe,
+#content.content-text .text-navbar {
+  box-sizing: border-box;
+  width: 90%;
+  height: calc(90vh - 100px);
+  max-width: 600px;
+  background: white;
+  padding: 20px 30px;
+  box-shadow: 5px 5px 5px 0 rgba(0,0,0,0.4);
+}
+
+#content.content-text .text-navbar {
+  height: auto;
+  padding: 10px 30px;
+  background: #FFCF33;
+  color: white;
+  font-size: 13px;
+  line-height: 2;
+}
+
+#content.content-text .text-navbar a {
+  float: right;
+  background: white;
+  color: #E3B92D;
+  text-decoration: none;
+  padding: 5px 10px;
+  line-height: 1;
+}
+
+#content.content-text .text-navbar a:hover {
+  box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.2);
 }
 
 #content.content-img,
@@ -121,15 +163,31 @@ body {
 }
 
 #content.content-download .download-word .download-top .download-image {
-  background-image: url(../images/home/word.gif);
+  background-image: url(../images/attachments/word.gif);
 }
 
 #content.content-download .download-ppt .download-top .download-image {
-  background-image: url(../images/home/ppt.gif);
+  background-image: url(../images/attachments/ppt.gif);
 }
 
 #content.content-download .download-excel .download-top .download-image {
-  background-image: url(../images/home/excel.gif);
+  background-image: url(../images/attachments/excel.gif);
+}
+
+#content.content-download .download-code .download-top .download-image {
+  background-image: url(../images/attachments/code.gif);
+}
+
+#content.content-download .download-zip .download-top .download-image {
+  background-image: url(../images/attachments/zip.gif);
+}
+
+#content.content-download .download-r-text .download-top .download-image {
+  background-image: url(../images/attachments/text.gif);
+}
+
+#content.content-download .download-undef .download-top .download-image {
+  background-image: url(../images/attachments/undef.gif);
 }
 
 #content.content-download .download .download-top .download-info {
@@ -169,4 +227,20 @@ body {
 
 #content.content-download .download-excel a {
   background: #27ae60;
+}
+
+#content.content-download .download-code a {
+  background: #38A5ED;
+}
+
+#content.content-download .download-zip a {
+  background: #CC75F0;
+}
+
+#content.content-download .download-r-text a {
+  background: #FFCF33;
+}
+
+#content.content-download .download-undef a {
+  background: #bbb;
 }
