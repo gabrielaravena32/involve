@@ -1,0 +1,156 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
+
+body {
+  position: relative;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+.content {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 265px);
+  margin-left: 265px;
+  padding: 30px 60px;
+}
+
+.content #timetable {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 60px);
+  user-select: none;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.content #timetable > div {
+  position: relative;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  width: calc(100% / 5);
+  height: calc(50% - 17.5px);
+}
+
+.content #timetable .timetable-day {
+  height: 35px;
+  padding: 10px;
+  text-align: center;
+  background: #f9f9f9;
+  color: #333;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+.content #timetable .timetable-date {
+  padding: 10px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.content #timetable .timetable-date > span {
+  font-size: 50px;
+  font-weight: bold;
+  display: block;
+  padding-bottom: 10px;
+  line-height: 50px;
+  color: #333;
+  text-align: left;
+}
+
+.content #timetable .timetable-date > span span {
+  position: absolute;
+  top: -3px;
+  font-size: 15px;
+  padding: 0 0 0 5px;
+}
+
+.content #timetable .timetable-date.selected {
+  border: 3px solid #3498db;
+  box-shadow: 0 0 10px 0 rgba(52, 152, 219, 0.8);
+}
+
+.content #timetable .timetable-date.selected > span {
+  color: #3498db;
+}
+
+.content #timetable .timetable-date div {
+  position: relative;
+  width: 100%;
+  max-height: calc(100% - 95px);
+  overflow: scroll;
+  margin-bottom: 5px;
+}
+
+.content #timetable .timetable-date div a {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  padding: 8px 10px;
+  margin-top: 7px;
+  font-size: 11px;
+  line-height: 15px;
+  text-align: left;
+  overflow: hidden;
+  color: white;
+  border-radius: 2px;
+  transform: scale(1);
+  transition: all cubic-bezier(0.55, -0.57, 0.6, 2.24) 0.2s;
+}
+
+.content #timetable .timetable-date div a:hover {
+  transform: scale(0.95);
+  transition: all cubic-bezier(0.55, -0.57, 0.6, 2.24) 0.2s;
+}
+
+.content #timetable .timetable-date div a:nth-child(1) {
+  margin-top: 0;
+}
+
+.class-colour-1 { background: #1abc9c; }
+.class-colour-2 { background: #16a085; }
+.class-colour-3 { background: #2ecc71; }
+.class-colour-4 { background: #27ae60; }
+.class-colour-5 { background: #f1c40f; }
+.class-colour-6 { background: #f39c12; }
+.class-colour-7 { background: #e67e22; }
+.class-colour-8 { background: #d35400; }
+.class-colour-9 { background: #3498db; }
+.class-colour-10 { background: #2980b9; }
+.class-colour-11 { background: #e74c3c; }
+.class-colour-12 { background: #c0392b; }
+.class-colour-13 { background: #9b59b6; }
+.class-colour-14 { background: #8e44ad; }
+.class-colour-15 { background: #34495e; }
+.class-colour-16 { background: #2c3e50; }
+
+.content #timetable .timetable-date div a span:nth-child(1) {
+  position: relative;
+  display: inline-block;
+  color: #eee;
+  width: 50px;
+  float: left;
+}
+
+.content #timetable .timetable-date div a span:nth-child(2) {
+  position: relative;
+  display: inline-block;
+  width: calc(100% - 50px);
+  font-size: 10px;
+}
+
+.content #timetable .timetable-date > a {
+  color: #3498db;
+  text-decoration: none;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.content #timetable .timetable-date > a:hover {
+  text-decoration: underline;
+}
