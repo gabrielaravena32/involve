@@ -16,7 +16,7 @@ if (!$_SESSION['token']) {
 // else: if the user is logged in
 } else {
   // select the user's information from the database where the user's token is correct
-  $sql = "SELECT ui.*, u.type FROM userInfo AS ui RIGHT JOIN users AS u ON u.userID = ui.userID WHERE u.token='{$_SESSION['token']}';";
+  $sql = "SELECT ui.*, u.type, u.email FROM userInfo AS ui RIGHT JOIN users AS u ON u.userID = ui.userID WHERE u.token='{$_SESSION['token']}';";
   $result = $conn->query($sql);
 
   // if there is a user with that token

@@ -1,0 +1,591 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,400');
+
+body {
+  position: relative;
+  display: block;
+  margin: 0px;
+  padding: 0px;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'Roboto', sans-serif;
+  background: #efefef;
+}
+
+.content {
+  position: relative;
+  box-sizing: border-box;
+  width: calc(100% - 265px);
+  margin-left: 265px;
+  min-height: 100%;
+  z-index: 1;
+}
+
+.content .settings-sidebar {
+  position: fixed;
+  left: 265px;
+  top: 0;
+  width: 250px;
+  height: 100vh;
+  background: #fcfcfc;
+  box-shadow: 2px 0px 3px 0 rgba(0,0,0,0.1);
+  overflow: hidden;
+  z-index: 4;
+}
+
+.content .settings-sidebar .settings-sidebar-heading {
+  position: relative;
+  width: 100%;
+  background: #fefefe;
+  box-shadow: 2px 0px 3px 0 rgba(0,0,0,0.2);
+  text-align: center;
+  padding: 20px 0;
+}
+
+.content .settings-sidebar .settings-sidebar-heading img {
+  height: 120px;
+  width: 120px;
+  margin: 20px 0;
+  border-radius: 50%;
+  box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.2);
+}
+
+.content .settings-sidebar .settings-sidebar-heading h2,
+.content .settings-sidebar .settings-sidebar-heading h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.content .settings-sidebar .settings-sidebar-heading h3 {
+  color: #555;
+  font-size: 15px;
+}
+
+.content .settings-sidebar a {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 20px 0;
+  border-bottom: 1px solid #aaa;
+  color: #aaa;
+  font-size: 14px;
+  line-height: 1;
+  text-decoration: none;
+  text-align: center;
+}
+
+.content .settings-sidebar a:hover {
+  color: #888;
+  font-weight: bold;
+}
+
+.content .settings-sidebar a.selected {
+  color: #3498db;
+  font-weight: bold;
+  cursor: default;
+}
+
+.content .settings-window {
+  box-sizing: border-box;
+  display: block;
+  position: relative;
+  width: calc(100% - 250px);
+  height: 100vh;
+  margin-left: 250px;
+  overflow: scroll;
+  z-index: 3;
+  color: #333;
+  padding: 50px;
+}
+
+.content .settings-window h4 {
+  margin: 0;
+  font-size: 26px;
+}
+
+.content .settings-window h5 {
+  margin: 20px 0 20px 0;
+  font-size: 16px;
+  color: #555;
+  line-height: 1.5;
+  max-width: 550px;
+}
+
+.content .settings-window .setting-input-group {
+  display: block;
+  padding: 17px 0;
+}
+
+.content .settings-window .setting-input-group label {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+  margin: 0;
+}
+
+.content .settings-window .setting-input-group .input-flex {
+  position: relative;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0px;
+}
+
+.content .settings-window .setting-input-group .input-flex input[type="text"],
+.content .settings-window .setting-input-group input[type="text"],
+.content .settings-window .setting-input-group .input-flex input[type="password"],
+.content .settings-window .setting-input-group input[type="password"] {
+  display: block;
+  position: relative;
+  width: 250px;
+  border: none;
+  border-bottom: 2px solid #333;
+  background: none;
+  outline: none;
+  color: #333;
+  padding: 8px 0;
+  margin: 0 20px 10px 0;
+}
+
+.content .settings-window .setting-input-group input:active,
+.content .settings-window .setting-input-group input:focus,
+.content .settings-window .setting-input-group .input-flex input:active,
+.content .settings-window .setting-input-group .input-flex input:focus {
+  border-bottom: 2px solid #2E87C2;
+}
+
+.content .settings-window .setting-input-group input.disabled {
+  cursor: not-allowed;
+  color: #888;
+}
+
+.content .settings-window .setting-input-group .settings-input-school {
+  display: block;
+  font-size: 12px;
+}
+
+.content .settings-window .setting-input-group .settings-input-school span {
+  margin: 0 10px 10px 0;
+  display: inline-block;
+}
+
+.content .settings-window .setting-input-group .settings-input-school a {
+  display: inline-block;
+  box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.2);
+  background: white;
+  padding: 10px;
+  font-size: 12px;
+  line-height: 18px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.content .settings-window .setting-input-group p {
+  font-size: 12px;
+  color: #555;
+  max-width: 550px;
+}
+
+.content .settings-window .setting-input-group p a {
+  text-decoration: underline;
+  color: inherit;
+}
+
+.content .settings-window .setting-input-group p a:hover {
+  color: #2E87C2;
+}
+
+.content .settings-window .input-profile-image .input-flex img,
+.content .settings-window .input-banner-image .input-flex img {
+  box-sizing: border-box;
+  border: 2px solid white;
+  box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.2);
+  height: 70px;
+  margin-right: 20px;
+}
+
+.content .settings-window .input-profile-image .input-flex img {
+  border-radius: 50%;
+  width: 70px;
+}
+
+.content .settings-window .input-banner-image .input-flex img {
+  width: auto;
+  max-width: 150px;
+}
+
+.content .settings-window .setting-input-group .change-profile,
+.content .settings-window .setting-input-group .change-banner {
+  background: #fff;
+  color: #333;
+  display: inline-block;
+}
+
+.content .settings-window .setting-input-group .input-flex .input-flex-right {
+  display: block;
+  height: 74px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-top: 5px;
+}
+
+.content .settings-window .setting-input-group button {
+  margin: 5px 0 0 0;
+  padding: 5px 10px;
+  font-size: 12px;
+  border: none;
+  box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.2);
+  background: #2E87C2;
+  color: white;
+  cursor: pointer;
+  outline: none;
+}
+
+.content .settings-window .setting-input-group button.disabled {
+  background: #fff;
+  color: #888;
+  cursor: not-allowed;
+}
+
+.content .settings-window .setting-input-group .setting-input-checkbox div {
+  box-sizing: border-box;
+  margin: 10px 0 10px 10px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.content .settings-window .setting-input-group .setting-input-checkbox label {
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+.content .settings-window .setting-input-group .setting-input-checkbox .checkbox-disabled label {
+  color: #888;
+}
+
+.content .settings-window .setting-input-group .setting-blocked-users {
+  display: block;
+  max-width: 400px;
+  box-sizing: border-box;
+  background: white;
+  box-shadow: 2px 2px 3px 1px rgba(0,0,0,0.2);
+  margin-top: 10px;
+}
+
+.content .settings-window .setting-input-group .setting-blocked-users .blocked-user {
+  padding: 15px;
+  border-top: 1px solid #888;
+  font-size: 12px;
+}
+
+.content .settings-window .setting-input-group .setting-blocked-users .blocked-user:nth-child(1) {
+  border-top: none;
+}
+
+.content .settings-window .setting-input-group .setting-blocked-users .blocked-user a {
+  float: right;
+  font-size: 10px;
+  line-height: 12px;
+  cursor: pointer;
+}
+
+.content .settings-window .setting-input-group .setting-blocked-users .blocked-user a:hover {
+  color: #2E87C2;
+}
+
+#changeProfile,
+#changeBanner {
+  position: fixed;
+  left: 264px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: calc(100vw - 264px);
+  height: 100vh;
+  z-index: 5;
+  background: rgba(16,37,66,0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+#changeProfile.active,
+#changeBanner.active {
+  display: flex;
+}
+
+#changeProfile .changeProfile-modal,
+#changeBanner .changeBanner-modal {
+  position: relative;
+  box-sizing: border-box;
+  width: 90%;
+  max-width: 600px;
+  height: auto;
+  background: white;
+  box-shadow: 3px 3px 10px 0px rgba(0,0,0,0.3);
+}
+
+#changeProfile .changeProfile-modal,
+#changeBanner .changeBanner-modal {
+  max-width: 700px;
+}
+
+#changeProfile .changeProfile-modal > *,
+#changeBanner .changeBanner-modal > * {
+  position: relative;
+  box-sizing: border-box;
+  display: block;
+  width: 100%;
+  padding: 0 30px;
+  z-index: 0;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-top h4,
+#changeBanner .changeBanner-modal .changeBanner-top h4 {
+  font-size: 20px;
+  line-height: 1;
+  margin: 0;
+  padding: 30px 0 15px 0;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-top .changeProfile-top-headings,
+#changeBanner .changeBanner-modal .changeBanner-top .changeBanner-top-headings {
+  border-bottom: 1px solid #aaa;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-top .changeProfile-top-headings a,
+#changeBanner .changeBanner-modal .changeBanner-top .changeBanner-top-headings a {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 10px 0;
+  line-height: 20px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-top .changeProfile-top-headings a.selected,
+#changeBanner .changeBanner-modal .changeBanner-top .changeBanner-top-headings a.selected {
+  border-bottom: 4px solid #357ae8;
+  padding: 10px 0 6px 0;
+}
+
+
+#changeProfile .changeProfile-modal .changeProfile-top .changeProfile-top-headings a:nth-child(1),
+#changeBanner .changeBanner-modal .changeBanner-top .changeBanner-top-headings a:nth-child(1) {
+  margin-left: 0;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content,
+#changeBanner .changeBanner-modal .changeBanner-content {
+  display: none;
+  height: 60vh;
+  max-height: 500px;
+  justify-content: center;
+  align-items: center;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content.selected,
+#changeBanner .changeBanner-modal .changeBanner-content.selected {
+  display: flex;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content input[type="file"],
+#changeBanner .changeBanner-modal .changeBanner-content input[type="file"] {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box,
+#changeBanner .changeBanner-modal .changeBanner-content .text-box {
+  display: none;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content.t1 .text-box:nth-child(2),
+#changeProfile .changeProfile-modal .changeProfile-content.t2 .text-box:nth-child(3),
+#changeProfile .changeProfile-modal .changeProfile-content.t3 .text-box:nth-child(4),
+#changeProfile .changeProfile-modal .changeProfile-content.t4 .text-box:nth-child(5),
+#changeProfile .changeProfile-modal .changeProfile-content.t5 .text-box:nth-child(6),
+#changeBanner .changeBanner-modal .changeBanner-content.t1 .text-box:nth-child(2),
+#changeBanner .changeBanner-modal .changeBanner-content.t2 .text-box:nth-child(3),
+#changeBanner .changeBanner-modal .changeBanner-content.t3 .text-box:nth-child(4),
+#changeBanner .changeBanner-modal .changeBanner-content.t4 .text-box:nth-child(5),
+#changeBanner .changeBanner-modal .changeBanner-content.t5 .text-box:nth-child(6) {
+  display: block;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box > *,
+#changeBanner .changeBanner-modal .changeBanner-content .text-box > * {
+  display: block;
+  text-align: center;
+  color: #aaa;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box > span:nth-child(1),
+#changeBanner .changeBanner-modal .changeBanner-content .text-box > span:nth-child(1) {
+  font-size: 30px;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box > span:nth-child(2),
+#changeBanner .changeBanner-modal .changeBanner-content .text-box > span:nth-child(2) {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box > label,
+#changeBanner .changeBanner-modal .changeBanner-content .text-box > label {
+  color: #5a5a5a;
+  padding: 5px 10px;
+  font-size: 13px;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box > label:hover,
+#changeBanner .changeBanner-modal .changeBanner-content .text-box > label:hover {
+  color: #000;
+  border: 1px solid #000;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box:nth-child(5) span,
+#changeBanner .changeBanner-modal .changeBanner-content .text-box:nth-child(5) span {
+  font-size: 18px;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box:nth-child(5) span:nth-child(3),
+#changeBanner .changeBanner-modal .changeBanner-content .text-box:nth-child(5) span:nth-child(3) {
+  font-size: 15px;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-content .text-box:nth-child(5) img,
+#changeBanner .changeBanner-modal .changeBanner-content .text-box:nth-child(5) img {
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 15px auto;
+}
+
+#changeProfile .changeProfile-modal #changeProfile-content-default,
+#changeBanner .changeBanner-modal #changeBanner-content-default {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-bottom,
+#changeBanner .changeBanner-modal .changeBanner-bottom {
+  width: calc(100% - 60px);
+  border-top: 1px solid #aaa;
+  padding: 20px 0 30px 0;
+  margin: 0 30px;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-bottom a,
+#changeBanner .changeBanner-modal .changeBanner-bottom a {
+  padding: 10px 15px;
+  border-radius: 1px;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-right: 10px;
+  cursor: pointer;
+  color: #666;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-bottom a:nth-child(2):hover,
+#changeBanner .changeBanner-modal .changeBanner-bottom a:nth-child(2):hover {
+  color: #000;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-bottom a:nth-child(1),
+#changeBanner .changeBanner-modal .changeBanner-bottom a:nth-child(1) {
+  background: #4d90fe;
+  color: white;
+  box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.2);
+}
+
+#changeProfile .changeProfile-modal .changeProfile-bottom a:nth-child(1):hover,
+#changeBanner .changeBanner-modal .changeBanner-bottom a:nth-child(1):hover {
+  background: #357ae8;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-bottom a:nth-child(1).disabled,
+#changeBanner .changeBanner-modal .changeBanner-bottom a:nth-child(1).disabled {
+  background: #aaa;
+  color: #333;
+  cursor: not-allowed;
+}
+
+#changeProfile .changeProfile-modal .changeProfile-close-button,
+#changeBanner .changeBanner-modal .changeBanner-close-button {
+  position: absolute;
+  right: 30px;
+  top: 30px;
+  height: 18px;
+  width: 18px;
+  font-size: 22px;
+  padding: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+#changeProfile .changeProfile-modal #changeProfile-content-default,
+#changeBanner .changeBanner-modal #changeBanner-content-default {
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#changeProfile .changeProfile-modal #changeProfile-content-default p,
+#changeBanner .changeBanner-modal #changeBanner-content-default p {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 20px 0 0 0;
+  margin: 0;
+  font-size: 12px;
+}
+
+#changeProfile .changeProfile-modal #changeProfile-content-default img {
+  width: calc(25% + 1px);
+  height: auto;
+  border-radius: 50%;
+}
+
+#changeProfile .changeProfile-modal #changeProfile-content-default img:hover {
+  background: rgba(52, 152, 219,0.3);
+  cursor: pointer;
+}
+
+#changeProfile .changeProfile-modal #changeProfile-content-default img.selected {
+  background: rgba(52, 152, 219,0.7);
+}
+
+#changeBanner .changeBanner-modal #changeBanner-content-default > div {
+  position: relative;
+  display: block;
+  width: calc(25% + 1px);
+  height: 100px;
+  background-position: center;
+  background-size: 1000% auto;
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+#changeBanner .changeBanner-modal #changeBanner-content-default #default-banner-img-4 {
+  background-size: 300% auto;
+}
+
+#changeBanner .changeBanner-modal #changeBanner-content-default > div:hover {
+  box-shadow: 0 0 5px 5px rgba(52, 152, 219,0.3);
+}
+
+#changeBanner .changeBanner-modal #changeBanner-content-default > div.selected {
+  box-shadow: 0 0 5px 5px rgba(52, 152, 219,0.7);
+  cursor: default;
+}

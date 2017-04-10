@@ -144,7 +144,7 @@ body {
   font-size: 10px;
 }
 
-.content #timetable .timetable-date > a {
+/*.content #timetable .timetable-date > a {
   color: #3498db;
   text-decoration: none;
   font-size: 10px;
@@ -153,4 +153,10 @@ body {
 
 .content #timetable .timetable-date > a:hover {
   text-decoration: underline;
+}*/
+
+.content #timetable .timetable-date .day-empty {
+  font-size: 12px;
+  color: #333;
+  text-align: center;
 }

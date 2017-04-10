@@ -240,11 +240,11 @@
 
   #create-post, #attachFile {
     position: fixed;
-    left: 0;
+    left: 264px;
     top: 0;
     right: 0;
     bottom: 0;
-    width: 100vw;
+    width: calc(100vw - 264px);
     height: 100vh;
     z-index: 5;
     background: rgba(16,37,66,0.7);

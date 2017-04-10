@@ -456,3 +456,357 @@ body {
     display: none;
   }
 }
+
+#tutorial-content.num1,
+#tutorial-content.num2,
+#tutorial-content.num3,
+#tutorial-content.num4,
+#tutorial-content.num5 {
+  display: block;
+}
+
+#tutorial-content.num1 #tutorial-bar span:nth-child(1),
+#tutorial-content.num2 #tutorial-bar span:nth-child(2),
+#tutorial-content.num4 #tutorial-bar span:nth-child(4),
+#tutorial-content.num5 #tutorial-bar span:nth-child(5) {
+  background: white;
+}
+
+#tutorial-content.num3 #tutorial-bar span:nth-child(3) {
+  background: black;
+}
+
+#tutorial-content.num2 .tutorial-screen:nth-child(2),
+#tutorial-content.num3 .tutorial-screen:nth-child(3),
+#tutorial-content.num4 .tutorial-screen:nth-child(4),
+#tutorial-content.num5 .tutorial-screen:nth-child(5) {
+  display: block;
+}
+
+#tutorial-content.num1 .tutorial-screen:nth-child(1) {
+  display: flex;
+}
+
+#tutorial-content {
+  display: none;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 30;
+  color: white;
+  cursor: default;
+}
+
+#tutorial-content #tutorial-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#tutorial-content #tutorial-bar div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align: items: center;
+}
+
+#tutorial-content #tutorial-bar div span {
+  display: block;
+  width: 15px;
+  height: 15px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  margin: 0 5px;
+  border: 3px solid white;
+  cursor: pointer;
+  transform: scale(1);
+}
+
+#tutorial-content #tutorial-bar div span:hover {
+  transform: scale(0.9);
+  background: rgba(0,0,0,0.3);
+}
+
+#tutorial-content.num3 #tutorial-bar div span {
+  border: 3px solid #333;
+}
+
+#tutorial-content #tutorial-bar p {
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#tutorial-content.num3 #tutorial-bar p {
+  color: #333;
+}
+
+#tutorial-content .tutorial-screen {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+#tutorial-content .tutorial-screen:nth-child(1) {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: rgba(27, 80, 115, 0.95);
+}
+
+#tutorial-content .tutorial-screen p {
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+#tutorial-content .tutorial-screen button {
+  background: none;
+  border: 2px solid white;
+  color: white;
+  padding: 8px 15px;
+  margin: none;
+  font-size: 13px;
+  outline: none;
+}
+
+#tutorial-content .tutorial-screen button:hover {
+  cursor: pointer;
+  background: white;
+  color: black;
+}
+
+#tutorial-content .highlighter {
+  position: fixed;
+  box-sizing: border-box;
+  box-shadow: inset 0 0 8px 2px rgba(230,126,34,0.6);
+  border: 5px solid #e67e22;
+}
+
+#tutorial-content .backgrounder {
+  position: fixed;
+  background: rgba(27, 80, 115, 0.8);
+}
+
+#tutorial-content .hl-1 {
+  top: 80px;
+  left: 0;
+  width: 264px;
+  height: 400px;
+}
+
+#tutorial-content .bg-1 {
+  top: 0;
+  left: 264px;
+  width: calc(100vw - 264px);
+  height: 100vh;
+}
+
+#tutorial-content .bg-2 {
+  top: 0;
+  left: 0;
+  width: 264px;
+  height: 80px;
+}
+
+#tutorial-content .bg-3 {
+  top: 480px;
+  left: 0;
+  width: 264px;
+  height: calc(100vh - 480px);
+}
+
+#tutorial-content .hl-2 {
+  top: 30px;
+  left: 190px;
+  width: 74px;
+  height: 60px;
+  border-right: none;
+  box-shadow: none;
+}
+
+#tutorial-content .hl-3 {
+  top: 0;
+  left: 259px;
+  width: 561px;
+  height: 30px;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+#tutorial-content .hl-4 {
+  top: 30px;
+  left: 800px;
+  width: 20px;
+  height: 60px;
+  border-top: none;
+  border-bottom: none;
+  border-left: none;
+  box-shadow: none;
+}
+
+#tutorial-content .hl-5 {
+  top: 90px;
+  left: 259px;
+  width: 561px;
+  height: calc(100% - 90px);
+  border-top: none;
+  box-shadow: none;
+}
+
+#tutorial-content .bg-4 {
+  top: 0;
+  left: 0;
+  width: 259px;
+  height: 30px;
+}
+
+#tutorial-content .bg-5 {
+  top: 30px;
+  left: 0;
+  width: 190px;
+  height: 60px;
+}
+
+#tutorial-content .bg-6 {
+  top: 90px;
+  left: 0;
+  width: 259px;
+  height: calc(100vh - 90px);
+}
+
+#tutorial-content .bg-7 {
+  top: 0;
+  left: 820px;
+  width: calc(100vw - 820px);
+  height: 100vh;
+}
+
+#tutorial-content .hl-6 {
+  bottom: 0;
+  right: 0;
+  width: 85px;
+  height: 85px;
+}
+
+#tutorial-content .bg-8 {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 85px);
+}
+
+#tutorial-content .bg-9 {
+  top: calc(100vh - 85px);
+  left: 0;
+  width: calc(100vw - 85px);
+  height: 85px;
+}
+
+#tutorial-content .hl-7 {
+  bottom: 0;
+  left: 0;
+  width: 264px;
+  height: 120px;
+}
+
+#tutorial-content .bg-10 {
+  top: 0;
+  left: 0;
+  height: calc(100vh - 120px);
+  width: 100vw;
+}
+
+#tutorial-content .bg-11 {
+  top: calc(100vh - 120px);
+  left: 264px;
+  height: 120px;
+  width: calc(100vw - 264px);
+}
+
+#tutorial-content > div img {
+  position: relative;
+}
+
+#tutorial-content .text-1 {
+  position: relative;
+  z-index: 5;
+  margin-top: 140px;
+  margin-left: 270px;
+  width: 300px;
+}
+
+#tutorial-content .text-1 img,
+#tutorial-content .text-2 img {
+  width: 50%;
+  height: auto;
+}
+
+#tutorial-content .text-1 p {
+  position: relative;
+  width: calc(100% - 20px);
+  margin-left: 20px;
+}
+
+#tutorial-content .text-2 {
+  position: relative;
+  z-index: 5;
+  width: 230px;
+  margin-left: 10px;
+  margin-top: 50px;
+}
+
+#tutorial-content .text-2 img {
+  margin-left: 60px;
+}
+
+#tutorial-content .text-3 {
+  position: absolute;
+  z-index: 5;
+  width: 200px;
+  right: 90px;
+  bottom: 20px;
+}
+
+#tutorial-content .text-3 img {
+  position: relative;
+  width: 50%;
+  float: right;
+  margin: none;
+}
+
+#tutorial-content .text-3 p {
+  margin-bottom: -40px;
+}
+
+#tutorial-content .text-4 {
+  position: absolute;
+  bottom: 40px;
+  z-index: 5;
+  width: 200px;
+  margin-left: 270px;
+}
+
+#tutorial-content .text-4 img {
+  position: relative;
+  width: 60%;
+  height: auto;
+  margin-top: -40px;
+}
+
+#tutorial-content .text-4 button {
+  float: right;
+}
+
+#tutorial-content .text-4 p {
+  margin-left: 20px;
+}

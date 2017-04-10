@@ -77,7 +77,7 @@
           <div class="package package-supervisor">
             <img src="images/info/supervisor-icon.gif" alt="Parent icon">
             <h5>Parent / Guardian</h5>
-            <p>Want to stay up to date on what your child is going through? Involve has a supervisor account that allows you to see how your child is performing and any assignements that they complete or have coming up.</p>
+            <p>Want to stay up to date on what your child is going through? Involve has a supervisor account that allows you to see how your child is performing and any assignments that they complete or have coming up.</p>
             <a href="">Create Supervisor Account</a>
           </div>
         </div>

@@ -205,7 +205,7 @@ if ($result->num_rows != 1) {
   if($pageLink === $userInfo['link'] || $selfPage) {
 
     // add a edit profile button
-    $output .= '<a href="">Edit Profile</a>';
+    $output .= '<a href="settings/account">Edit Profile</a>';
 
   // else another user's profile
   } else {
@@ -266,7 +266,11 @@ if ($result->num_rows != 1) {
                             (SELECT groupID FROM userGroups
                               WHERE userID = {$pageInfo['userID']}))
                         AND ((startDate - {$currentDay}) % repeatInterval = 0
-                            OR (startDate - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysLeftInMonth});";
+                            OR (startDate - 3600 - {$currentDay}) % repeatInterval = 0
+                            OR (startDate + 3600 - {$currentDay}) % repeatInterval = 0
+                            OR (startDate - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysLeftInMonth}
+                            OR (startDate - 3600 - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysLeftInMonth}
+                            OR (startDate + 3600 - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysLeftInMonth});";
 
   // run the sql query above
   $timetableItemsQuery = $conn->query($timetableItemsSQL);
@@ -324,7 +328,7 @@ if ($result->num_rows != 1) {
       // for all the classes the teacher takes part in
       for ($j = 0; $j < count($classes); $j++) {
         // if the class is on that day
-        if(($classes[$j]['startDate'] - $ts) % $classes[$j]['repeatInterval'] == 0) {
+        if(($classes[$j]['startDate'] - $ts) % $classes[$j]['repeatInterval'] == 0 || ($classes[$j]['startDate'] - 3600 - $ts) % $classes[$j]['repeatInterval'] == 0 || ($classes[$j]['startDate'] + 3600 - $ts) % $classes[$j]['repeatInterval'] == 0) {
 
           // add one to the counter of classes today
           $classToday += 1;

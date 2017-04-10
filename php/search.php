@@ -100,7 +100,7 @@ if($query != '' && $userHash) {
 
         $i = 1;
 
-        $output .= '<div class="search-users-flex">';
+        $output .= '<h3>Users</h3><div class="search-users-flex">';
         while($searchUser = $userSearchQuery->fetch_assoc()) {
           if($i > 3) {
             break;
@@ -136,6 +136,134 @@ if($query != '' && $userHash) {
 
       }
     } // can add else statment
+
+    // group search query
+    $groupSearchQuery = $conn->query("SELECT g.groupID, g.groupColour, g.groupName, g.groupSubject, g.groupLink, ui.photo, CONCAT(ui.prefix, ' ', ui.lastName) AS teacherName, (SELECT COUNT(userID) FROM userGroups AS ug WHERE ug.groupID = g.groupID) AS numGroupMembers
+                                        FROM groups AS g
+                                        RIGHT JOIN userInfo AS ui ON g.teacherID = ui.userID
+                                        WHERE
+                                          (ui.firstName LIKE '%{$query}%'
+                                          OR
+                                          ui.lastName LIKE '%{$query}%'
+                                          OR
+                                          CONCAT(ui.prefix, ' ', ui.lastName) LIKE '%{$query}%'
+                                          OR
+                                          CONCAT(ui.firstName, ' ', ui.lastName) LIKE '%{$query}%'
+                                          OR
+                                          g.groupName LIKE '%{$query}%'
+                                          OR
+                                          g.groupSubject LIKE '%{$query}%')
+                                        AND
+                                          (g.groupID IN (SELECT groupID FROM userGroups WHERE userID = {$userID})
+                                          OR
+                                          g.teacherID = {$userID});");
+
+    // get the number of groups found
+    $numGroups = $groupSearchQuery->num_rows;
+
+    // if there is one group
+    if($numGroups == 1) {
+      $group = $groupSearchQuery->fetch_assoc();
+
+      // query to get the most recent post
+      $mostRecentPostQuery = $conn->query("SELECT ui.photo, p.text, ui.prefix, ui.firstName, ui.lastName
+                                          	FROM posts AS p RIGHT JOIN userInfo AS ui ON ui.userID = p.userID
+                                          	WHERE p.groupID = {$group['groupID']}
+                                          	ORDER BY date DESC LIMIT 1;");
+
+      // handle most recent post output
+      $mrpo = '<h6 class="latest-post-info">No posts have been made yet.</h6>';
+      if($mostRecentPostQuery->num_rows == 1) {
+        $mrp = $mostRecentPostQuery->fetch_assoc();
+
+        $name = $mrp['firstName'].' '.$mrp['lastName'];
+        if($mrp['prefix']) {
+          $name = $mrp['prefix'].' '.$mrp['lastName'];
+        }
+
+        $mrpo = '<div class="latest-post">
+                  <h6>Latest post</h6>
+                  <div class="post-message">
+                    <img src="'.$mrp['photo'].'">
+                    <p><span>'.$name.'</span>'.$mrp['text'].'</p>
+                  </div>
+                </div>';
+      }
+
+      // query to get the upcoming assignments
+      $upcomingAssignmentsQuery = $conn->query("SELECT p.aName, p.due
+                                              	FROM posts AS p
+                                              	WHERE
+                                              		p.groupID = {$group['groupID']}
+                                              		AND
+                                              		p.type = 'a'
+                                              		AND
+                                              		p.due > CURRENT_TIMESTAMP
+                                              	ORDER BY due DESC;");
+
+      // handle upcoming assignments output
+      $uao = '<h5>No upcoming assignments</h5>';
+      if($upcomingAssignmentsQuery->num_rows > 0) {
+        $uao = '<h5>Upcoming Assignments</h5>';
+        while($ass = $upcomingAssignmentsQuery->fetch_assoc()) {
+          $due = strtotime($ass['due']);
+          $uao .= '<div class="upcoming-assignment">'.$ass['aName'].'<span>'.date("j M", $due).'</span></div>';
+        }
+      }
+
+      // the output for a single group
+      $output .= '<a href="group/'.$group['groupLink'].'" class="search-single-group search-group-colour-'.$group['groupColour'].'">
+                    <div class="search-group-top">
+                      <div class="search-group-top-left">
+                        <h4>'.$group['groupName'].'</h4>
+                        <h5><span>'.$group['numGroupMembers'].' students for '.$group['groupSubject'].'</span>&nbsp;&nbsp;//&nbsp;&nbsp;<span>'.$group['teacherName'].'</span></h5>
+                      </div>
+                      <img src="'.$group['photo'].'" alt="teacher\'s photo">
+                    </div>
+                    <div class="search-group-bottom">
+                      '.$uao.$mrpo.'
+                    </div>
+                  </a>';
+
+    // more than one group found --> go through each group
+    } else if ($numGroups > 0){
+
+      $output .= '<h3>Groups</h3><div class="search-group-flex">';
+
+      $a = 0;
+      while($group = $groupSearchQuery->fetch_assoc()) {
+        // increment counter
+        $a = $a + 1;
+
+        // output to the screen
+        $output .= '<a href="group/'.$group['groupLink'].'" class="search-group-colour-'.$group['groupColour'].'">
+                      <div class="search-group-ind-flex">
+                        <div class="search-group-top">
+                          <h4>'.$group['groupName'].'</h4>
+                          <span>'.$group['numGroupMembers'].' students ('.$group['groupSubject'].')</span>
+                          <span>'.$group['teacherName'].'</span>
+                        </div>
+                        <img src="'.$group['photo'].'" alt="teacher\'s photo">
+                      </div>
+                    </a>';
+
+        // stop at three groups
+        if($a == 3) {
+          break;
+        }
+      }
+
+      // if there were only two groups found add a blank find more groups filler
+      if ($a == 2) {
+        $output .= '<div class="disabled-group">
+                      <h4>No other groups found.</h4>
+                      <p>To join more groups you need to use the code given by your teacher.</p>
+                      <button class="join-class-btn" onclick="toggleJoinClass()">+ Join A Class</button>
+                    </div>';
+      }
+
+      $output .= '</div>';
+    }
 
     // search for files with the query
     $fileSearchQuery = $conn->query("SELECT f.fileIntUrl, f.fileExtUrl, f.fileType, f.fileName, ui.firstName, ui.lastName, ui.prefix, ui.photo, g.groupSubject, g.groupName
@@ -276,7 +404,7 @@ if($query != '' && $userHash) {
 
         $i = 1;
 
-        $output .= '<div class="search-files-flex">';
+        $output .= '<h3>Files</h3><div class="search-files-flex">';
 
         while($searchFile = $fileSearchQuery->fetch_assoc()) {
           if($i > 3) {
@@ -288,7 +416,7 @@ if($query != '' && $userHash) {
 
           if ($fileType == 'url') {
             $output .= '<a href="'.$searchFile['fileExtUrl'].'" class="search-single-file">
-                          <iframe src="'.$searchFile['fileExtUrl'].'" sandbox="true"></iframe>
+                          <iframe src="'.$searchFile['fileExtUrl'].'" sandbox="true" scrolling="no"></iframe>
                           <div class="file-information">
                             <h4>'.get_title($searchFile['fileExtUrl']).'</h4>
                             <h5>Website</h5>
@@ -338,8 +466,69 @@ if($query != '' && $userHash) {
 
     }
 
+    // post query
+    $postsSearchQuery = $conn->query("SELECT ui.photo, ui.firstName, ui.lastName, ui.prefix, p.text, p.date, g.groupLink, g.groupName, g.groupColour FROM
+                                      	(posts AS p RIGHT JOIN userInfo AS ui ON ui.userID = p.userID)
+                                      	RIGHT JOIN groups AS g ON g.groupID = p.groupID
+                                      	WHERE
+                                      		(p.groupID IN (SELECT groupID FROM userGroups WHERE userID = {$userID})
+                                          OR
+                                          g.teacherID = {$userID})
+                                      	AND (
+                                          g.groupName LIKE '%{$query}%'
+                                      		OR ui.firstName LIKE '%{$query}%'
+                                      		OR ui.lastName LIKE '%{$query}%'
+                                       		OR CONCAT(ui.firstName, ' ', ui.lastName) LIKE '%{$query}%'
+                                       		OR CONCAT(ui.prefix,' ',ui.lastName) LIKE '%{$query}%'
+                                      		OR p.text LIKE '%{$query}%'
+                                          OR p.aName LIKE '%{$query}%'
+                                        ) ORDER BY p.date LIMIT 4;");
+
+    // if there are posts found
+    if($postsSearchQuery->num_rows > 0) {
+
+      // prepare the output
+      $output .= '<h3>Posts</h3><div class="search-posts-flex">';
+      while($post = $postsSearchQuery->fetch_assoc()) {
+
+        // prepare the post creator's name
+        $name = $post['firstName'].' '.$post['lastName'];
+        if($post['prefix'] != '') {
+          $name = $post['prefix'].' '.$post['lastName'];
+        }
+
+        // prepare the date
+        $date = date("j M", strtotime($post['date']));
+
+        // output the information for the post
+        $output .= '<div class="result-post">
+                      <img src="'.$post['photo'].'">
+                      <div class="post-right">
+                        <h5>'.$name.' <span>'.$date.'</span></h5>
+                        <h6 class="search-group-colour-'.$post['groupColour'].'">'.$post['groupName'].'</h6>
+                        <p>'.$post['text'].'</p>
+                      </div>
+                    </div>';
+      }
+
+      // end the post output
+      $output .= '</div>';
+    }
 
   }
+
+  // show the end of the search result
+  if($output) {
+    $output .= '<span>End of results for \''.$query.'\'.</span><hr>';
+
+  // nothing found
+  } else {
+    $output .= 'TODO: nothing found.';
+  }
+
+// nothing searched
+} else {
+  $output .= '<img src="images/search/options.jpg">';
 }
 
 echo $output;
@@ -349,26 +538,6 @@ echo $output;
 
 
 <!--
----- GROUP -----
-
-SELECT g.groupColour, g.groupName, g.groupSubject, g.groupLink, ui.photo, CONCAT(ui.prefix, ' ', ui.lastName) AS teacherName, (SELECT COUNT(userID) FROM userGroups AS ug WHERE ug.groupID = g.groupID) AS numGroupMembers
-	FROM groups AS g
-	RIGHT JOIN userInfo AS ui ON g.teacherID = ui.userID
-	WHERE
-		(ui.firstName LIKE "%{$query}%"
-		OR
-		ui.lastName LIKE "%{$query}%"
-		OR
-		g.groupName LIKE "%{$query}%"
-		OR
-		g.groupSubject LIKE "%{$query}%")
-	AND
-		(g.groupID IN (SELECT groupID FROM userGroups WHERE userID = {$userID})
-		OR
-		g.teacherID = {$userID});
-
-IF THERE IS ONLY ONE THEN WE SHOULD GET UPCOMING TAKS AND THE LAST POST INFORMATION
-
 
 ----- POSTS -----
 

@@ -3,17 +3,11 @@
 
   <div>
     <h4>Search for...</h4>
-    <?php
-
-    if($userInfo['type'] === 's') {
-      echo '<input type="text" id="search-sidebar-input" placeholder="Teachers, files, posts and subjects">';
-    } else {
-      echo '<input type="text" id="search-sidebar-input" placeholder="Teachers, students, files, posts and subjects">';
-    }
-    ?>
+    <input type="text" id="search-sidebar-input" placeholder="People, files, posts and groups">
   </div>
 
   <div id="search-result">
+    <img src="images/search/options.jpg">
   </div>
 </div>
 
@@ -36,7 +30,7 @@
       <a href="backpack" id="sidebar-nav-backpack">Backpack</a>
     </div>
 
-    <button id="join-class-btn" onclick="toggleJoinClass()">+ Join A Class</button>
+    <button class="join-class-btn" onclick="toggleJoinClass()">+ Join A Class</button>
     <button id="student-code-btn" onclick="toggleSCode()">+ Enter an sCode</button>
   </div>
   <div class="flex-wrapper">
@@ -101,7 +95,7 @@
   box-shadow: 2px 0px 3px 0 rgba(0,0,0,0.3);
   left: 265px;
   top: 0;
-  z-index: 2;
+  z-index: 10;
   padding: 30px;
   box-sizing: border-box;
   transform: translateX(-105%);
@@ -163,6 +157,28 @@
   overflow: scroll;
 }
 
+#search-result img {
+  position: relative;
+  width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+#search-result > h3 {
+  margin: 0 0 10px 0;
+  color: #555;
+  font-size: 15px;
+  text-decoration: underline;
+}
+
+#search-result > span {
+  display: block;
+  margin: 0;
+  color: #555;
+  font-size: 12px;
+  text-align: center;
+}
+
 #search-sidebar #search-result > div,
 #search-sidebar #search-result > a {
   position: relative;
@@ -173,7 +189,8 @@
 }
 
 #search-result .search-single-user,
-#search-result .search-single-file {
+#search-result .search-single-file,
+#search-result .search-single-group {
   margin-bottom: 30px;
   box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.3);
   overflow: hidden;
@@ -567,6 +584,7 @@
   border: none;
   margin: none;
   padding: none;
+  overflow: hidden;
 }
 
 #search-result .search-files-flex a .file-information {
@@ -604,6 +622,263 @@
   margin: 0 2px 0 8px;
 }
 
+#search-result > a.search-single-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-bottom: 30px;
+}
+
+#search-result > a.search-single-group > div {
+  box-sizing: border-box;
+  position: relative;
+  width: 90%;
+  padding: 20px 30px 0 30px;
+}
+
+#search-result > a.search-single-group .search-group-top {
+  background: white;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+#search-result > a.search-single-group .search-group-top img {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: -40px;
+  box-shadow: 0 0 3px 2px rgba(0,0,0,0.3);
+}
+
+#search-result > a.search-single-group .search-group-top .search-group-top-left h4 {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+#search-result > a.search-single-group .search-group-top .search-group-top-left h5 {
+  margin-bottom: 20px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #555;
+}
+
+#search-result > a.search-single-group .search-group-top .search-group-top-left h5 > span {
+  color: #333;
+}
+
+#search-result > a.search-single-group .search-group-bottom {
+  background: #efefef;
+}
+
+#search-result > a.search-single-group .search-group-bottom h5 {
+  margin: 0;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+#search-result > a.search-single-group .search-group-bottom .upcoming-assignment {
+  font-size: 10px;
+  color: #333;
+  margin-bottom: 3px;
+}
+
+#search-result > a.search-single-group .search-group-bottom .upcoming-assignment span {
+  color: #888;
+  margin-left: 20px;
+  font-style: normal;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post {
+  margin-top: 20px;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post h6 {
+  margin: 0;
+  font-size: 12px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post .post-message {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post .post-message img {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post .post-message p {
+  display: block;
+  position: relative;
+  margin: 0 0 0 10px;
+  width: calc(100% - 40px);
+  font-size: 11px;
+  line-height: 15px;
+  color: #555;
+  max-height: 30px;
+  overflow: hidden;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post .post-message p span {
+  display: block;
+  color: #333;
+}
+
+#search-result > a.search-single-group .search-group-bottom .latest-post-info {
+  margin-bottom: 15px;
+}
+
+#search-result .search-group-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+
+#search-result .search-group-flex a,
+#search-result .search-group-flex .disabled-group {
+  position: relative;
+  width: calc(100%/3 - 10px);
+  text-decoration: none;
+  color: black;
+  box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.3);
+}
+
+#search-result .search-group-flex .search-group-ind-flex {
+  position: relative;
+  box-sizing: border-box;
+  padding: 0 12px;
+  width: 100%;
+  margin-top: 30px;
+  background: white;
+  overflow: hidden;
+  text-align: center;
+}
+
+#search-result .search-group-flex .search-group-ind-flex > div > h4 {
+  margin: 15px 0 10px 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+#search-result .search-group-flex .search-group-ind-flex > div > span {
+  display: block;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #555;
+}
+
+#search-result .search-group-flex .search-group-ind-flex > img {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: -40px;
+  margin-top: 15px;
+  box-shadow: 0 0 3px 2px rgba(0,0,0,0.3);
+}
+
+#search-result .search-group-flex > div {
+  box-sizing: border-box;
+  position: relative;
+  padding: 15px;
+  text-align: center;
+}
+
+#search-result .search-group-flex > div h4 {
+  font-size: 14px;
+  color: #333;
+  margin: 10px 0 0 0;
+  line-height: 1.2;
+}
+
+#search-result .search-group-flex > div p {
+  color: #555;
+  font-size: 12px;
+  margin: 10px 0 20px 0;
+  line-height: 1.3;
+}
+
+#search-result .search-group-flex > div button {
+  margin: 0 auto;
+}
+
+#search-result .search-posts-flex {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#search-result .search-posts-flex .result-post {
+  box-sizing: border-box;
+  position: relative;
+  width: calc(50% - 8px);
+  box-shadow: 1px 1px 3px 0 rgba(0,0,0,0.3);
+  overflow: hidden;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  padding: 10px;
+}
+
+#search-result .search-posts-flex .result-post img {
+  width: 30px;
+  height: 30px;
+  box-shadow: 0 0 3px 2px rgba(0,0,0,0.3);
+  border-radius: 50%;
+}
+
+#search-result .search-posts-flex .result-post > div {
+  position: relative;
+  width: calc(100% - 45px);
+}
+
+#search-result .search-posts-flex .result-post > div h5 {
+  color: #333;
+  font-size: 12px;
+  margin: 0 0 5px 0;
+}
+
+#search-result .search-posts-flex .result-post > div h5 span {
+  color: #888;
+  margin-left: 5px;
+}
+
+#search-result .search-posts-flex .result-post > div h6 {
+  display: inline-block;
+  margin: 0 0 7px 0;
+  padding: 5px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  color: white;
+}
+
+#search-result .search-posts-flex .result-post > div p {
+  line-height: 15px;
+  max-height: 30px;
+  overflow: hidden;
+  margin: 0;
+  font-size: 11px;
+  color: #555;
+}
+
 .sidebar {
   box-sizing: border-box;
   position: fixed;
@@ -612,7 +887,7 @@
   padding: 40px 0;
   left: 0;
   border-right: 1px solid rgba(0, 0, 0, 0.12);
-  z-index: 3;
+  z-index: 20;
   background: white;
   box-shadow: 2px 0px 3px 0 rgba(0,0,0,0.1);
 
@@ -631,7 +906,7 @@
   color: #43c5b8;
 }
 
-.sidebar #join-class-btn,
+.join-class-btn,
 .sidebar #student-code-btn {
   position: relative;
   display: block;
@@ -651,7 +926,7 @@
   margin-top: 10px;
 }
 
-.sidebar #join-class-btn:hover,
+.join-class-btn:hover,
 .sidebar #student-code-btn:hover {
   color: #43c5b8;
   border: 1px solid #43c5b8;
@@ -770,7 +1045,7 @@
   top: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 5;
+  z-index: 30;
   background: rgba(16,37,66,0.7);
   justify-content: center;
   align-items: center;

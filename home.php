@@ -45,6 +45,9 @@ $numPosts = $numPostsQuery->fetch_assoc()['num'];
     <!-- User Action -->
     <?php include_once "includes/user-action.php"; ?>
 
+    <!-- tutorial content -->
+    <div id="tutorial-content"></div>
+
     <script>
       // Create a dynamic textbox
       // I modified the code a bit to work for my case but this should be good
@@ -185,6 +188,65 @@ $numPosts = $numPostsQuery->fetch_assoc()['num'];
         }
       }
 
+      var tutorialContent = document.getElementById('tutorial-content');
+      var searchSidebar = document.getElementById('search-sidebar');
+      var currentSlide = 1;
+
+      var toggleTutorialShown = function() {
+        if (tutorialContent.className == '') {
+          tutorialContent.className = 'num1';
+          document.onkeydown = function(e) {
+            if(e.which == 39 || e.which == 32) {
+              if(currentSlide < 5) {
+                tutorialScreenGoto(currentSlide + 1);
+              } else {
+                toggleTutorialShown();
+              }
+            } else if (e.which == 37) {
+              if(currentSlide > 1) {
+                tutorialScreenGoto(currentSlide - 1);
+              }
+            }
+          };
+        } else {
+          tutorialContent.className = '';
+          document.onkeydown = null;
+        }
+      }
+
+      var tutorialScreenGoto = function(num) {
+        currentSlide = num;
+        tutorialContent.className = "num"+num;
+        if(num == 3) {
+          searchSidebar.className = 'shown';
+        } else {
+          searchSidebar.className = '';
+        }
+      };
+
+      // open tutorial screen
+      var openTutorialScreen = function() {
+        var request;
+
+        // set the correct request type (AJAX)
+        if (window.XMLHttpRequest) {
+          request = new XMLHttpRequest();
+        } else {
+          request = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+
+        request.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            toggleTutorialShown();
+            tutorialContent.innerHTML = this.responseText;
+          }
+        };
+
+        // send the request to get the contents of homescreentutorialHTML.php
+        request.open('GET', 'includes/homescreentutorialHTML.php', true);
+        request.send();
+      };
+
       // variables for the posts loading
       var numberOfPostsAvailableToUser = <?php echo $numPosts; ?>,
           numCurrentPosts = 0,
@@ -250,6 +312,8 @@ $numPosts = $numPostsQuery->fetch_assoc()['num'];
           }
 
           contentElem.innerHTML = '<img class="no-posts-img" src="images/tutorial/no-posts.png"><p><span>You have no posts to view yet.</span>Try joining a class or creating a post for your class.<br><br><a onclick="toggleJoinClass()">+ Join A Class</a></p>';
+
+          openTutorialScreen();
         }
       }
 

@@ -101,7 +101,7 @@ if($classesQuery->num_rows > 0) {
     if($assessments[$class['groupID']]) {
       foreach($assessments[$class['groupID']] as $ass) {
         $output .= '<div>
-                      <span><span>'.timeToWords($ass[1]).'</span>
+                      <span><span>Due '.timeToWords($ass[1]).'</span>
                         '.$ass[0].'
                       </span>
                     </div>';

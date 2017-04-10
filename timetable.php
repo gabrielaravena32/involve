@@ -76,7 +76,11 @@ $classesSQL =  "SELECT gt.startDate, gt.repeatInterval, gt.time, gt.length, g.gr
                 	OR g.groupID IN
                     (SELECT groupID FROM userGroups WHERE userID = {$userInfo['userID']}))
                 AND ((startDate - {$currentDay}) % repeatInterval = 0
-                    OR (startDate - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysToLoad})
+                    OR (startDate - 3600 - {$currentDay}) % repeatInterval = 0
+                    OR (startDate + 3600 - {$currentDay}) % repeatInterval = 0
+                    OR (startDate - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysToLoad}
+                    OR (startDate - 3600 - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysToLoad}
+                    OR (startDate + 3600 - {$currentDay}) % repeatInterval + repeatInterval < 86400*{$numDaysToLoad})
                 ORDER BY gt.time;";
 
 // query database with above SQL
@@ -130,7 +134,7 @@ for ($i = 0; $i < 12; $i++) {
     }
 
     foreach($classes as $class) {
-      if(($class['startDate'] - $ts) % $class['repeatInterval'] == 0) {
+      if(($class['startDate'] - $ts) % $class['repeatInterval'] == 0 || ($class['startDate'] - 3600 - $ts) % $class['repeatInterval'] == 0 || ($class['startDate'] + 3600 - $ts) % $class['repeatInterval'] == 0) {
         $startTime = ($class['time'] / 3600) % 12;
         if($class['time'] / 3600 == 12) {
           $startTime = 12;
@@ -144,7 +148,11 @@ for ($i = 0; $i < 12; $i++) {
       }
     }
 
-    $output .= '</div><a onclick="timetableSelectDay('.$i.')">See day in more detail</a></div>';
+    if (substr($output, -4) != "</a>") {
+      $output .= '</div><span class="day-empty">Your day is empty.</span></div>';
+    } else {
+      $output .= '</div></div>';
+    }
 
   }
 
@@ -164,18 +172,7 @@ echo $output;
 
 ?>
       </div>
-
-
     </div>
-
-
-    <script type="text/javascript">
-
-      var timetableSelectDay = function(slot) {
-        alert("TODO");
-      };
-
-    </script>
 
   </body>
 </html>

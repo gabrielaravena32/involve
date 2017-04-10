@@ -5,15 +5,17 @@
   $timestamp = new Datetime('today', new Datetimezone('Australia/Sydney'));
   $timestamp = strtotime($timestamp->format('Y-m-d H:i:s') . PHP_EOL);
 
-  echo "TODO: Fix the current class / time feature";
-
   // SQL query to select all the classes that the user has that day
   // returns the className, time class starts, length of class, and the prefix and last name of teacher (e.g. Mr, Smith)
   $currentClassSQL = "SELECT g.groupName, gt.time, gt.length, ui.prefix, ui.lastName FROM
                         (groups AS g RIGHT JOIN groupsTimetable AS gt ON g.groupID=gt.groupID)
                         RIGHT JOIN userInfo AS ui ON g.teacherID=ui.userID
                         WHERE
-                          ((gt.startDate - {$timestamp}) % gt.repeatInterval = 0)
+                          (((gt.startDate - {$timestamp}) % gt.repeatInterval = 0)
+                            OR
+                            ((gt.startDate - 3600 - {$timestamp}) % gt.repeatInterval = 0)
+                            OR
+                            ((gt.startDate + 3600 - {$timestamp}) % gt.repeatInterval = 0))
                           AND g.groupID IN
                             (SELECT ug.groupID FROM userGroups AS ug
                                       WHERE ug.userID={$userInfo['userID']})
